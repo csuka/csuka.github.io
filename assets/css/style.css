@@ -531,6 +531,27 @@ section {
   border: 2px solid #1f5297;
 }
 
+.resume .read-more-text {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+}
+
+.resume span {
+  color: #149ddd;
+  cursor: pointer;
+}
+
+.resume .read-more-text.show + span {
+  display: none;
+}
+
+.resume .read-more-text.show {
+  display: block;
+  overflow: auto;
+}
+
 /*--------------------------------------------------------------
 # Portfolio
 --------------------------------------------------------------*/

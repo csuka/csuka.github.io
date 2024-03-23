@@ -252,4 +252,19 @@
    */
   new PureCounter();
 
+let readMoreTextElements = document.querySelectorAll('.resume-item > span');
+
+console.log('the spans', readMoreTextElements);
+
+  // Iterate over each element
+readMoreTextElements.forEach(element => {
+  // Add a click event listener to each element
+  console.log('the span',  element);
+  element.addEventListener('click', () => {
+    // Toggle the 'show' class on the element that was clicked
+    console.log('span on click',  element);
+    element.closest('.resume-item').querySelector('.read-more-text').classList.toggle('show');
+  });
+});
+
 })()
