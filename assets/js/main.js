@@ -267,4 +267,75 @@ readMoreTextElements.forEach(element => {
   });
 });
 
+  /**
+   * Auto-update footer year
+   */
+  const yearEl = document.getElementById('current-year');
+  if (yearEl) {
+    yearEl.textContent = new Date().getFullYear();
+  }
+
+  /**
+   * Lightweight page search (by sections)
+   */
+  const searchInput = document.getElementById('search-input');
+  const resultsList = document.getElementById('search-results');
+  if (searchInput && resultsList) {
+    const sections = [...document.querySelectorAll('main section[id]')];
+    const index = sections.map(sec => {
+      const titleEl = sec.querySelector('.section-title h2') || sec.querySelector('h2') || sec.querySelector('h3');
+      const title = titleEl ? titleEl.textContent.trim() : sec.id;
+      const text = sec.textContent.replace(/\s+/g, ' ').trim();
+      return { id: sec.id, title, text };
+    });
+
+    const renderResults = (items) => {
+      resultsList.innerHTML = '';
+      items.slice(0, 10).forEach(item => {
+        const li = document.createElement('li');
+        const a = document.createElement('a');
+        a.href = `#${item.id}`;
+        a.className = 'scrollto';
+        a.textContent = `${item.title}`;
+        li.appendChild(a);
+        resultsList.appendChild(li);
+      });
+      if (!items.length && searchInput.value.trim().length) {
+        const li = document.createElement('li');
+        li.textContent = 'No matches';
+        resultsList.appendChild(li);
+      }
+    };
+
+    const doSearch = (q) => {
+      const query = q.toLowerCase().trim();
+      if (!query) {
+        resultsList.innerHTML = '';
+        return;
+      }
+      const results = index.filter(item =>
+        item.title.toLowerCase().includes(query) || item.text.toLowerCase().includes(query)
+      );
+      renderResults(results);
+    };
+
+    searchInput.addEventListener('input', (e) => doSearch(e.target.value));
+
+    // Delegate scrolling behavior for dynamically created links
+    resultsList.addEventListener('click', (e) => {
+      const target = e.target.closest('a');
+      if (target && target.hash) {
+        e.preventDefault();
+        const body = select('body');
+        if (body.classList.contains('mobile-nav-active')) {
+          body.classList.remove('mobile-nav-active')
+          const navbarToggle = select('.mobile-nav-toggle')
+          navbarToggle.classList.toggle('bi-list')
+          navbarToggle.classList.toggle('bi-x')
+        }
+        scrollto(target.hash);
+      }
+    });
+  }
+
 })()
