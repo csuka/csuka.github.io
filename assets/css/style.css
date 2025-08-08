@@ -3,6 +3,57 @@ body {
   color: #272829;
 }
 
+/*
+  Animated site-wide soft purple/yellow highlights over white
+  - Low-opacity radial blobs drift subtly over a white background
+  - Keeps hero image unchanged; very gentle motion
+  - Respects prefers-reduced-motion
+*/
+:root {
+  --blob-purple: rgba(186, 170, 255, 0.45); /* bolder purple */
+  --blob-yellow: rgba(255, 234, 170, 0.35); /* bolder yellow */
+  --blob-pink:   rgba(255, 205, 225, 0.28); /* bolder pink */
+}
+
+html, body { min-height: 100%; }
+
+body {
+  background-color: #ffffff;
+}
+
+/* Fixed, scroll-independent animated backdrop using a pseudo-element */
+body::before {
+  content: "";
+  position: fixed;
+  z-index: -1;
+  inset: -15vh -15vw; /* overscan to allow movement without edges showing */
+  width: 130vw;
+  height: 130vh;
+  pointer-events: none;
+  background-image:
+    radial-gradient(50% 50% at center, var(--blob-purple) 0%, rgba(186,170,255,0) 54%),
+    radial-gradient(46% 46% at center, var(--blob-yellow) 0%, rgba(255,234,170,0) 58%),
+    radial-gradient(40% 40% at center, var(--blob-pink)   0%, rgba(255,205,225,0) 54%),
+    radial-gradient(44% 44% at center, var(--blob-purple) 0%, rgba(186,170,255,0) 54%),
+    radial-gradient(50% 50% at center, var(--blob-yellow) 0%, rgba(255,234,170,0) 58%);
+  background-repeat: no-repeat;
+  background-size: 1800px 1800px, 2200px 2200px, 1600px 1600px, 1700px 1700px, 2000px 2000px;
+  background-position: -30% 10%, 110% 20%, 50% 130%, 20% 90%, 90% 70%;
+  animation: bg-float 480s linear infinite;
+}
+
+@keyframes bg-float {
+  0%   { background-position: -30% 10%, 110% 20%, 50% 130%, 20% 90%, 90% 70%; }
+  25%  { background-position: 10% 30%, 80% 25%, 55% 90%, 5% 70%, 110% 50%; }
+  50%  { background-position: 50% 60%, 50% 50%, 40% 40%, 30% 30%, 70% 20%; }
+  75%  { background-position: 90% 80%, 20% 75%, 35% 10%, 70% 20%, 30% 10%; }
+  100% { background-position: 130% 90%, -30% 70%, 30% -30%, 120% 60%, -20% 40%; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  body::before { animation: none; }
+}
+
 a {
   color: #149ddd;
   text-decoration: none;
@@ -108,6 +159,15 @@ h6 {
   background: #149ddd;
   color: #fff;
   text-decoration: none;
+}
+
+/* Sidebar logo sizing */
+#header .profile .site-logo img {
+  display: block;
+  width: 120px;
+  height: auto;
+  object-fit: contain;
+  margin: 8px auto 0;
 }
 
 #hero,
@@ -259,11 +319,118 @@ h6 {
   color: #fff;
 }
 
+/* Gradient accent underline under the word 'Automation' */
+#hero h1 .accent {
+  position: relative;
+  display: inline-block;
+}
+
+#hero h1 .accent::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -10px;
+  height: 4px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #bfa0ff, #ffe59a, #bfa0ff);
+  background-size: 200% 100%;
+  animation: hero-accent 6s ease-in-out infinite;
+  width: var(--accent-width, 100%);
+  margin: 0 auto;
+}
+
+@keyframes hero-accent {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
 #hero p {
   color: #fff;
+  margin-top: 6px;
   margin-bottom: 50px;
   font-size: 26px;
   font-family: "Poppins", sans-serif;
+}
+
+.hero-ctas {
+  display: flex;
+  gap: 18px;
+  margin-top: 24px;    /* space below headline */
+  margin-bottom: 40px; /* space above typed line */
+  /* Appear after 3s with a subtle rise */
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: hero-ctas-in 900ms ease-out 3s forwards;
+}
+
+@media (max-width: 576px) {
+  .hero-ctas {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+    margin-bottom: 32px;
+  }
+}
+
+@keyframes hero-ctas-in {
+  0% {
+    visibility: hidden;
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  1% { visibility: visible; }
+  100% {
+    visibility: visible;
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-ctas {
+    animation: none;
+    visibility: visible;
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.btn-hero {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-weight: 600;
+  font-family: "Poppins", sans-serif;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
+  text-decoration: none;
+}
+
+.btn-hero:hover { transform: translateY(-2px); }
+
+.btn-hero-primary {
+  color: #1a0b2e;
+  background: linear-gradient(135deg, #ffe59a, #d8b4ff);
+  box-shadow: 0 8px 24px rgba(216, 180, 255, 0.25);
+}
+
+.btn-hero-primary:hover {
+  box-shadow: 0 10px 28px rgba(216, 180, 255, 0.35);
+}
+
+.btn-hero-secondary {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.15);
+  border: 1px solid rgba(255, 255, 255, 0.35);
+}
+
+.btn-hero-secondary:hover {
+  background: rgba(255, 255, 255, 0.25);
 }
 
 #hero p span {
@@ -302,7 +469,7 @@ section {
 }
 
 .section-bg {
-  background: #f5f8fd;
+  background: transparent; /* remove blue banners behind sections */
 }
 
 .section-title {
@@ -316,9 +483,9 @@ section {
 }
 
 .section-title .title-with-logo img {
-  margin-top: -20px;
-  width: 80px;
-  height: 79px;
+  margin-top: -16px;
+  width: 120px;
+  height: 120px;
   object-fit: contain;
 }
 
@@ -1203,3 +1370,5 @@ section {
     padding-right: 20px 15px;
   }
 }
+
+/* Remove previous override: keep hero image and original overlay intact */

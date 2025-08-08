@@ -66,6 +66,30 @@
   }
 
   /**
+   * Slower, eased scroll for featured links
+   */
+  const scrolltoSlow = (el, duration = 900) => {
+    const target = select(el)
+    if (!target) return
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      return scrollto(el)
+    }
+    const startY = window.scrollY
+    const targetY = target.offsetTop
+    const diff = targetY - startY
+    let start
+    const easeInOutCubic = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2
+    const step = (ts) => {
+      if (start === undefined) start = ts
+      const elapsed = ts - start
+      const progress = Math.min(elapsed / duration, 1)
+      window.scrollTo(0, startY + diff * easeInOutCubic(progress))
+      if (elapsed < duration) requestAnimationFrame(step)
+    }
+    requestAnimationFrame(step)
+  }
+
+  /**
    * Back to top button
    */
   let backtotop = select('.back-to-top')
@@ -104,7 +128,11 @@
         navbarToggle.classList.toggle('bi-list')
         navbarToggle.classList.toggle('bi-x')
       }
-      scrollto(this.hash)
+      if (this.dataset && this.dataset.slowScroll === 'true') {
+        scrolltoSlow(this.hash, 900)
+      } else {
+        scrollto(this.hash)
+      }
     }
   }, true)
 
@@ -273,6 +301,28 @@ readMoreTextElements.forEach(element => {
   const yearEl = document.getElementById('current-year');
   if (yearEl) {
     yearEl.textContent = new Date().getFullYear();
+  }
+
+  /**
+   * Subtle parallax for hero content (mouse-based)
+   */
+  const hero = select('#hero');
+  const heroContainer = select('#hero .hero-container');
+  const allowParallax = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+  if (hero && heroContainer && allowParallax) {
+    const handleMove = (e) => {
+      const rect = hero.getBoundingClientRect();
+      const cx = rect.left + rect.width / 2;
+      const cy = rect.top + rect.height / 2;
+      const dx = (e.clientX - cx) / rect.width;  // -0.5 .. 0.5
+      const dy = (e.clientY - cy) / rect.height; // -0.5 .. 0.5
+      const max = 8; // px
+      heroContainer.style.transform = `translate3d(${(-dx * max).toFixed(2)}px, ${(-dy * max).toFixed(2)}px, 0)`;
+    };
+    hero.addEventListener('mousemove', handleMove);
+    hero.addEventListener('mouseleave', () => {
+      heroContainer.style.transform = 'translate3d(0,0,0)';
+    });
   }
 
   /**
