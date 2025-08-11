@@ -13,6 +13,23 @@ body {
   --blob-purple: rgba(186, 170, 255, 0.45); /* bolder purple */
   --blob-yellow: rgba(255, 234, 170, 0.35); /* bolder yellow */
   --blob-pink:   rgba(255, 205, 225, 0.28); /* bolder pink */
+  /* Global horizontal page gutters */
+  --page-gutter: 16px;
+}
+
+/* Increase page gutters on larger screens */
+@media (min-width: 768px) {
+  :root { --page-gutter: 24px; }
+}
+@media (min-width: 1200px) {
+  :root { --page-gutter: 28px; }
+}
+
+/* Apply gutters to Bootstrap containers site‑wide */
+.container,
+.container-fluid {
+  padding-left: var(--page-gutter) !important;
+  padding-right: var(--page-gutter) !important;
 }
 
 html, body { min-height: 100%; }
@@ -310,6 +327,9 @@ h6 {
   max-width: 700px;
   margin: 0 auto;
   padding: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start; /* keep left alignment consistent */
 }
 
 #hero h1 {
@@ -317,6 +337,9 @@ h6 {
   font-weight: 700;
   line-height: 56px;
   color: #fff;
+  opacity: 0;
+  transform: translateY(8px);
+  animation: hero-appear 700ms ease-out 4s forwards;
 }
 
 /* Gradient accent underline under the word 'Automation' */
@@ -354,16 +377,20 @@ h6 {
   font-family: "Poppins", sans-serif;
 }
 
+/* Layout: headline + buttons above, typed line at bottom */
+#hero .hero-container h1,
+#hero .hero-container .hero-ctas { order: 1; }
+#hero .hero-container p { order: 2; }
+
 .hero-ctas {
   display: flex;
   gap: 18px;
   margin-top: 24px;    /* space below headline */
   margin-bottom: 40px; /* space above typed line */
-  /* Appear after 3s with a subtle rise */
-  visibility: hidden;
+  /* Appear together with headline after 4s */
   opacity: 0;
   transform: translateY(8px);
-  animation: hero-ctas-in 900ms ease-out 3s forwards;
+  animation: hero-appear 700ms ease-out 4s forwards;
 }
 
 @media (max-width: 576px) {
@@ -378,23 +405,23 @@ h6 {
 
 @keyframes hero-ctas-in {
   0% {
-    visibility: hidden;
     opacity: 0;
     transform: translateY(8px);
   }
-  1% { visibility: visible; }
   100% {
-    visibility: visible;
     opacity: 1;
     transform: translateY(0);
   }
 }
 
+@keyframes hero-appear {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
 @media (prefers-reduced-motion: reduce) {
+  #hero h1,
   .hero-ctas {
-    animation: none;
-    visibility: visible;
-    opacity: 1;
     transform: none;
   }
 }
