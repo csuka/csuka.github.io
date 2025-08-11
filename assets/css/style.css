@@ -123,7 +123,7 @@ h6 {
 #header {
   position: fixed;
   top: 0;
-  left: 0;
+  left: -300px; /* closed by default on all sizes */
   bottom: 0;
   width: 300px;
   transition: all ease-in-out 0.5s;
@@ -189,19 +189,13 @@ h6 {
 
 #hero,
 #main {
-  margin-left: 300px;
+  margin-left: 0; /* align content full-width when menu closed */
 }
 
-@media (max-width: 1199px) {
-  #header {
-    left: -300px;
-  }
-
-  #hero,
-  #main {
-    margin-left: 0;
-  }
-}
+/* When menu is open, shift layout */
+body.mobile-nav-active #header { left: 0; }
+body.mobile-nav-active #hero,
+body.mobile-nav-active #main { margin-left: 300px; }
 
 
 .nav-menu {
@@ -277,9 +271,7 @@ h6 {
   overflow: hidden;
 }
 
-.mobile-nav-active #header {
-  left: 0;
-}
+/* moved above with other layout rules */
 
 #hero {
   width: 100%;
@@ -303,7 +295,7 @@ h6 {
 }
 
 @media screen and (min-width: 1199px) {
-  #hero {
+  body.mobile-nav-active #hero {
     width: calc(100% - 300px);
   }
 }
@@ -1318,12 +1310,16 @@ section {
   color: #f4f6fd;
   font-size: 14px;
   position: fixed;
-  left: 0;
+  left: -300px; /* hidden by default with menu closed */
   bottom: 0;
   width: 300px;
   z-index: 9999;
   background: #040b14;
+  transition: left 0.5s ease-in-out;
 }
+
+/* Reveal footer when menu is open */
+body.mobile-nav-active #footer { left: 0; }
 
 #footer .copyright {
   text-align: center;
@@ -1392,10 +1388,11 @@ section {
 
 @media (max-width: 1199px) {
   #footer {
-    position: static;
-    width: auto;
-    padding-right: 20px 15px;
+    position: fixed; /* keep behavior consistent on mobile */
+    left: -300px;    /* hidden until toggled */
+    width: 300px;
   }
+  body.mobile-nav-active #footer { left: 0; }
 }
 
 /* Remove previous override: keep hero image and original overlay intact */
