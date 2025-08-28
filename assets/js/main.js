@@ -385,44 +385,42 @@ readMoreTextElements.forEach(element => {
   }
 
   /**
-   * Spin logo with base speed; increase speed gently while scrolling
-   * - JS-driven rotation ensures consistent clockwise direction
+   * Spin logos via CSS; adjust duration with scroll
    */
   (function initLogoSpin() {
-    const logos = select('.section-title .title-with-logo img', true);
+    const logos = document.querySelectorAll('.section-title .title-with-logo img, #header .profile img');
     const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
-    if (!logos || !logos.length || !allowMotion) return;
+    if (!logos.length || !allowMotion) return;
 
-    // Per-logo state
-    const states = logos.map(() => ({ angle: 0 }));
-
-    // Base angular velocity (deg/s) and scroll boost
-    const BASE = 360 / 14; // ~25.7 deg/s for a ~14s rotation (faster idle)
+    const BASE_SPEED = 360 / 12; // deg/s (idle ~12s per rotation)
+    const MAX_SPEED = 120;       // deg/s cap
+    let velocity = 0;            // px per ms
     let lastY = window.scrollY;
     let lastT = performance.now();
-    let velocity = 0;           // px per ms (smoothed)
-    const decay = 0.88;         // smoothing factor per frame (slightly stickier)
-    const MAX_SPEED = 100;      // deg/s cap (faster on scroll)
+    const decay = 0.9;
 
-    const raf = (now) => {
-      const dtMs = now - lastT;
-      const dt = Math.max(dtMs, 0.1);
+    const setDuration = (seconds) => {
+      const val = (Math.max(3, seconds)).toFixed(2) + 's';
+      logos.forEach(logo => logo.style.setProperty('--logo-spin-duration', val));
+    };
+    setDuration(12);
+
+    window.addEventListener('scroll', () => {
+      const now = performance.now();
       const dy = Math.abs(window.scrollY - lastY);
-      const v = dy / dt;             // px/ms
-      velocity = Math.max(velocity * decay, v);
-
-      // Slightly stronger boost from scroll activity; clamp to MAX_SPEED
-      const boost = Math.min(velocity * 70, MAX_SPEED - BASE); // deg/s stronger boost
-      const speed = BASE + boost; // deg/s
-      const delta = speed * (dt / 1000);
-
-      states.forEach((s, idx) => {
-        s.angle = (s.angle + delta) % 360;
-        logos[idx].style.transform = `rotate(${s.angle.toFixed(2)}deg)`;
-      });
-
+      const dt = Math.max(now - lastT, 1);
+      const v = dy / dt;
+      velocity = Math.max(velocity, v);
       lastY = window.scrollY;
       lastT = now;
+    }, { passive: true });
+
+    const raf = () => {
+      velocity *= decay;
+      const boost = Math.min(velocity * 80, MAX_SPEED - BASE_SPEED); // deg/s
+      const speed = BASE_SPEED + boost;
+      const duration = 360 / speed;
+      setDuration(duration);
       requestAnimationFrame(raf);
     };
     requestAnimationFrame(raf);
