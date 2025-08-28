@@ -392,7 +392,7 @@ readMoreTextElements.forEach(element => {
     const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
     if (!logos.length || !allowMotion) return;
 
-    const BASE_SPEED = 360 / 12; // deg/s (idle ~12s per rotation)
+    const BASE_SPEED = 360 / 9; // deg/s (idle ~9s per rotation)
     const MAX_SPEED = 120;       // deg/s cap
     let velocity = 0;            // px per ms
     let lastY = window.scrollY;
@@ -403,7 +403,7 @@ readMoreTextElements.forEach(element => {
       const val = (Math.max(3, seconds)).toFixed(2) + 's';
       logos.forEach(logo => logo.style.setProperty('--logo-spin-duration', val));
     };
-    setDuration(12);
+    setDuration(9);
 
     window.addEventListener('scroll', () => {
       const now = performance.now();
