@@ -137,15 +137,10 @@
   }, true)
 
   /**
-   * Scroll with ofset on page load with hash links in the url
+   * Remove auto-scroll on initial load
+   * Browsers will handle deep links (/#section) natively; we avoid forcing a scroll
    */
-  window.addEventListener('load', () => {
-    if (window.location.hash) {
-      if (select(window.location.hash)) {
-        scrollto(window.location.hash)
-      }
-    }
-  });
+  // Intentionally disabled smooth-scroll on first load to prevent unwanted jumps
 
   /**
    * Hero type effect
