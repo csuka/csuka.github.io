@@ -1,0 +1,34 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Windows
+Thumbs.db
+ehthumbs.db
+
+# Node (if used locally)
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Jekyll (GitHub Pages)
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Build artifacts
+dist/
+build/
+.cache/
+
+# Source maps (exclude from repo)
+*.map
+
+# Environment files
+.env
+.env.*
+
