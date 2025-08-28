@@ -140,7 +140,6 @@ h6 {
   width: 120px;
   border: 8px solid #2c2f3f;
   transform-origin: 50% 50%;
-  animation: logo-spin var(--logo-spin-duration, 9s) linear infinite;
 }
 
 #header .profile h1 {
@@ -270,7 +269,7 @@ body.mobile-nav-active #main { margin-left: 300px; }
 }
 
 .mobile-nav-active {
-  overflow: hidden;
+  overflow: auto; /* allow page scroll when menu is open */
 }
 
 /* moved above with other layout rules */

@@ -388,7 +388,7 @@ readMoreTextElements.forEach(element => {
    * Spin logos via CSS only (no scroll-based changes)
    */
   (function initLogoSpin() {
-    const logos = document.querySelectorAll('.section-title .title-with-logo img, #header .profile img');
+    const logos = document.querySelectorAll('.section-title .title-with-logo img');
     const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
     if (!logos.length || !allowMotion) return;
     logos.forEach(logo => logo.style.setProperty('--logo-spin-duration', '9s'));
