@@ -140,7 +140,7 @@ h6 {
   width: 120px;
   border: 8px solid #2c2f3f;
   transform-origin: 50% 50%;
-  animation: logo-spin 24s linear infinite;
+  animation: logo-spin var(--logo-spin-duration, 14s) linear infinite;
 }
 
 #header .profile h1 {
@@ -509,7 +509,7 @@ section {
   height: 120px;
   object-fit: contain;
   transform-origin: 50% 50%;
-  animation: logo-spin 24s linear infinite;
+  animation: logo-spin var(--logo-spin-duration, 14s) linear infinite;
 }
 
 @keyframes logo-spin {

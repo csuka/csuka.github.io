@@ -402,12 +402,12 @@ readMoreTextElements.forEach(element => {
     const states = logos.map(() => ({ angle: 0 }));
 
     // Base angular velocity (deg/s) and scroll boost
-    const BASE = 360 / 24; // 15 deg/s for a ~24s rotation (faster idle)
+    const BASE = 360 / 14; // ~25.7 deg/s for a ~14s rotation (faster idle)
     let lastY = window.scrollY;
     let lastT = performance.now();
     let velocity = 0;           // px per ms (smoothed)
     const decay = 0.88;         // smoothing factor per frame (slightly stickier)
-    const MAX_SPEED = 72;       // deg/s cap (a bit faster on scroll)
+    const MAX_SPEED = 100;      // deg/s cap (faster on scroll)
 
     const raf = (now) => {
       const dtMs = now - lastT;
@@ -417,7 +417,7 @@ readMoreTextElements.forEach(element => {
       velocity = Math.max(velocity * decay, v);
 
       // Slightly stronger boost from scroll activity; clamp to MAX_SPEED
-      const boost = Math.min(velocity * 50, MAX_SPEED - BASE); // deg/s
+      const boost = Math.min(velocity * 70, MAX_SPEED - BASE); // deg/s stronger boost
       const speed = BASE + boost; // deg/s
       const delta = speed * (dt / 1000);
 
