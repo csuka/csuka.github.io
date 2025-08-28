@@ -139,6 +139,8 @@ h6 {
   display: block;
   width: 120px;
   border: 8px solid #2c2f3f;
+  transform-origin: 50% 50%;
+  animation: logo-spin 24s linear infinite;
 }
 
 #header .profile h1 {
@@ -507,6 +509,18 @@ section {
   height: 120px;
   object-fit: contain;
   transform-origin: 50% 50%;
+  animation: logo-spin 24s linear infinite;
+}
+
+@keyframes logo-spin {
+  to { transform: rotate(360deg); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #header .profile img,
+  .section-title .title-with-logo img {
+    animation: none !important;
+  }
 }
 
 
