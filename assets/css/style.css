@@ -506,7 +506,9 @@ section {
   width: 120px;
   height: 120px;
   object-fit: contain;
+  transform-origin: 50% 50%;
 }
+
 
 .section-title h2 {
   font-size: 32px;
