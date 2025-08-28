@@ -385,45 +385,13 @@ readMoreTextElements.forEach(element => {
   }
 
   /**
-   * Spin logos via CSS; adjust duration with scroll
+   * Spin logos via CSS only (no scroll-based changes)
    */
   (function initLogoSpin() {
     const logos = document.querySelectorAll('.section-title .title-with-logo img, #header .profile img');
     const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
     if (!logos.length || !allowMotion) return;
-
-    const BASE_SPEED = 360 / 9; // deg/s (idle ~9s per rotation)
-    const MAX_SPEED = 120;       // deg/s cap
-    let velocity = 0;            // px per ms
-    let lastY = window.scrollY;
-    let lastT = performance.now();
-    const decay = 0.9;
-
-    const setDuration = (seconds) => {
-      const val = (Math.max(3, seconds)).toFixed(2) + 's';
-      logos.forEach(logo => logo.style.setProperty('--logo-spin-duration', val));
-    };
-    setDuration(9);
-
-    window.addEventListener('scroll', () => {
-      const now = performance.now();
-      const dy = Math.abs(window.scrollY - lastY);
-      const dt = Math.max(now - lastT, 1);
-      const v = dy / dt;
-      velocity = Math.max(velocity, v);
-      lastY = window.scrollY;
-      lastT = now;
-    }, { passive: true });
-
-    const raf = () => {
-      velocity *= decay;
-      const boost = Math.min(velocity * 80, MAX_SPEED - BASE_SPEED); // deg/s
-      const speed = BASE_SPEED + boost;
-      const duration = 360 / speed;
-      setDuration(duration);
-      requestAnimationFrame(raf);
-    };
-    requestAnimationFrame(raf);
+    logos.forEach(logo => logo.style.setProperty('--logo-spin-duration', '9s'));
   })();
 
 })()
