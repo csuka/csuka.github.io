@@ -15,6 +15,9 @@ body {
   --blob-pink:   rgba(255, 205, 225, 0.18); /* softer pink */
   /* Global horizontal page gutters */
   --page-gutter: 16px;
+  /* Brand accent colors (match underline under Automation) */
+  --brand-purple: #bfa0ff;
+  --brand-yellow: #ffe59a; /* soft gold (Automation underline) */
 }
 
 /* Increase page gutters on larger screens */
@@ -95,8 +98,24 @@ body::before { content: none !important; }
   100% { background-position: 130% 90%, -30% 70%, 30% -30%, 120% 60%, -20% 40%, 20% 40%, 75% 30%, 40% 85%; }
 }
 
+/* Animate a CSS variable angle to rotate gradient colors while frame is static */
+@property --ring-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+@keyframes spin-angle { to { --ring-angle: 360deg; } }
+
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #header .profile picture::before,
+  .about .col-lg-4 picture::before {
+    animation: none !important;
+  }
 }
 
 a {
@@ -166,8 +185,54 @@ h6 {
   margin: 15px auto;
   display: block;
   width: 120px;
-  border: 8px solid #2c2f3f;
   transform-origin: 50% 50%;
+}
+
+/* Decorative gradient frame around sidebar avatar */
+#header .profile picture {
+  position: relative;
+  display: inline-block;
+  margin: 15px auto;
+  border-radius: 50%;
+}
+
+#header .profile picture::before {
+  content: "";
+  position: absolute;
+  inset: -4px; /* extend a bit outside the image */
+  border-radius: inherit;
+  /* Multi-tint gold with subtle purple shimmers (mirrored) */
+  background: conic-gradient(from var(--ring-angle),
+    /* warm gold family */
+    #fff4cc 0deg,
+    #ffeaa6 30deg,
+    var(--brand-yellow) 70deg,
+    /* mirror-side soft purples */
+    #e9d6ff 85deg,
+    #d8b4ff 105deg,
+    /* back to golds */
+    var(--brand-yellow) 130deg,
+    #ffd97a 150deg,
+    #fff1bf 190deg,
+    #ffe8a6 230deg,
+    /* original-side soft purples */
+    #e9d6ff 260deg,
+    #d8b4ff 285deg,
+    /* return to golds */
+    var(--brand-yellow) 310deg,
+    #fff4cc 360deg
+  );
+  animation: spin-angle 16s linear infinite;
+  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0);
+          mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0);
+  z-index: 0;
+}
+
+#header .profile img {
+  position: relative;
+  z-index: 1;
+  border: 0; /* remove inner white gap */
+  border-radius: 50%;
 }
 
 #header .profile h1 {
@@ -493,6 +558,59 @@ body.mobile-nav-active #main { margin-left: 300px; }
   #hero {
     background-attachment: fixed;
   }
+}
+
+/* Decorative animated frame for About page photo */
+.about .col-lg-4 picture {
+  position: relative;
+  display: block;
+  border-radius: 16px;
+  box-shadow: 0 10px 28px rgba(20, 157, 221, 0.18);
+}
+
+.about .col-lg-4 picture::before {
+  content: "";
+  position: absolute;
+  inset: -5px; /* expand slightly for a prominent frame */
+  border-radius: inherit;
+  /* Multi-tint gold with subtle purple shimmers (mirrored) */
+  background: conic-gradient(from var(--ring-angle),
+    #fff4cc 0deg,
+    #ffeaa6 30deg,
+    var(--brand-yellow) 70deg,
+    /* mirror-side soft purples */
+    #e9d6ff 85deg,
+    #d8b4ff 105deg,
+    /* back to golds */
+    var(--brand-yellow) 130deg,
+    #ffd97a 150deg,
+    #fff1bf 190deg,
+    #ffe8a6 230deg,
+    /* original-side soft purples */
+    #e9d6ff 260deg,
+    #d8b4ff 285deg,
+    var(--brand-yellow) 310deg,
+    #fff4cc 360deg
+  );
+  animation: spin-angle 18s linear infinite;
+  /* cut out the center to create a border ring */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  padding: 6px; /* ring thickness */
+  z-index: 0;
+}
+
+.about .col-lg-4 picture img {
+  position: relative;
+  z-index: 1;
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: inherit; /* match outer frame to avoid white sliver */
+  border: 0;              /* remove inner white gap */
+  background: transparent;
 }
 
 @media (max-width: 768px) {
