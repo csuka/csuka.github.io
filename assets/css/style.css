@@ -10,9 +10,9 @@ body {
   - Respects prefers-reduced-motion
 */
 :root {
-  --blob-purple: rgba(186, 170, 255, 0.45); /* bolder purple */
-  --blob-yellow: rgba(255, 234, 170, 0.35); /* bolder yellow */
-  --blob-pink:   rgba(255, 205, 225, 0.28); /* bolder pink */
+  --blob-purple: rgba(232, 214, 178, 0.28); /* softer, more yellowish */
+  --blob-yellow: rgba(255, 234, 170, 0.22); /* softer yellow */
+  --blob-pink:   rgba(255, 205, 225, 0.18); /* softer pink */
   /* Global horizontal page gutters */
   --page-gutter: 16px;
 }
@@ -36,39 +36,42 @@ html, body { min-height: 100%; }
 
 body {
   background-color: #ffffff;
-}
-
-/* Fixed, scroll-independent animated backdrop using a pseudo-element */
-body::before {
-  content: "";
-  position: fixed;
-  z-index: -1;
-  inset: -15vh -15vw; /* overscan to allow movement without edges showing */
-  width: 130vw;
-  height: 130vh;
-  pointer-events: none;
+  /* Animated soft blobs directly on body background */
   background-image:
     radial-gradient(50% 50% at center, var(--blob-purple) 0%, rgba(186,170,255,0) 54%),
     radial-gradient(46% 46% at center, var(--blob-yellow) 0%, rgba(255,234,170,0) 58%),
     radial-gradient(40% 40% at center, var(--blob-pink)   0%, rgba(255,205,225,0) 54%),
     radial-gradient(44% 44% at center, var(--blob-purple) 0%, rgba(186,170,255,0) 54%),
-    radial-gradient(50% 50% at center, var(--blob-yellow) 0%, rgba(255,234,170,0) 58%);
+    radial-gradient(50% 50% at center, var(--blob-yellow) 0%, rgba(255,234,170,0) 58%),
+    /* extra soft cloud layers for a less spotty look */
+    radial-gradient(60% 60% at center, rgba(255,245,230,0.18) 0%, rgba(255,245,230,0.10) 22%, rgba(255,245,230,0) 70%),
+    radial-gradient(65% 65% at center, rgba(255,250,230,0.16) 0%, rgba(255,250,230,0.08) 24%, rgba(255,250,230,0) 72%),
+    radial-gradient(55% 55% at center, rgba(255,240,220,0.14) 0%, rgba(255,240,220,0.06) 20%, rgba(255,240,220,0) 68%);
   background-repeat: no-repeat;
-  background-size: 1800px 1800px, 2200px 2200px, 1600px 1600px, 1700px 1700px, 2000px 2000px;
-  background-position: -30% 10%, 110% 20%, 50% 130%, 20% 90%, 90% 70%;
-  animation: bg-float 480s linear infinite;
+  background-size: 1800px 1800px, 2200px 2200px, 1600px 1600px, 1700px 1700px, 2000px 2000px,
+                    2800px 2800px, 2600px 2600px, 3000px 3000px;
+  background-position: -30% 10%, 110% 20%, 50% 130%, 20% 90%, 90% 70%,
+                       20% 40%, 75% 30%, 40% 85%;
+  background-attachment: fixed;
+  /* Soften cloud layers blending to avoid hotspots */
+  background-blend-mode: normal, normal, normal, normal, normal, soft-light, soft-light, soft-light;
+  animation: bg-float 3s linear infinite alternate;
 }
 
+/* Fixed, scroll-independent animated backdrop using a pseudo-element */
+/* Disable previous pseudo-element approach */
+body::before { content: none !important; }
+
 @keyframes bg-float {
-  0%   { background-position: -30% 10%, 110% 20%, 50% 130%, 20% 90%, 90% 70%; }
-  25%  { background-position: 10% 30%, 80% 25%, 55% 90%, 5% 70%, 110% 50%; }
-  50%  { background-position: 50% 60%, 50% 50%, 40% 40%, 30% 30%, 70% 20%; }
-  75%  { background-position: 90% 80%, 20% 75%, 35% 10%, 70% 20%, 30% 10%; }
-  100% { background-position: 130% 90%, -30% 70%, 30% -30%, 120% 60%, -20% 40%; }
+  0%   { background-position: -30% 10%, 110% 20%, 50% 130%, 20% 90%, 90% 70%, 20% 40%, 75% 30%, 40% 85%; }
+  25%  { background-position: 15% 25%, 85% 30%, 65% 85%, 15% 70%, 85% 15%, 20% 40%, 75% 30%, 40% 85%; }
+  50%  { background-position: 20% 80%, 80% 70%, 25% 25%, 85% 50%, 15% 20%, 20% 40%, 75% 30%, 40% 85%; }
+  75%  { background-position: 70% 85%, 25% 80%, 75% 20%, 40% 15%, 35% 25%, 20% 40%, 75% 30%, 40% 85%; }
+  100% { background-position: 130% 90%, -30% 70%, 30% -30%, 120% 60%, -20% 40%, 20% 40%, 75% 30%, 40% 85%; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  body::before { animation: none; }
+  body { animation: none; }
 }
 
 a {
