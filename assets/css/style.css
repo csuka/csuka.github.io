@@ -58,6 +58,27 @@ body {
   animation: bg-float 3s linear infinite alternate;
 }
 
+/* Avoid jank on mobile: don't fix background on small screens */
+@media (max-width: 991px) {
+  body { background-attachment: scroll; }
+}
+
+/* Skip link: visually hidden until focused */
+.skip-link.visually-hidden {
+  position: absolute;
+  left: 8px;
+  top: -40px;
+  padding: 8px 12px;
+  background: #fff;
+  color: #000;
+  border-radius: 6px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+  z-index: 10000;
+}
+.skip-link.visually-hidden:focus {
+  top: 8px;
+}
+
 /* Fixed, scroll-independent animated backdrop using a pseudo-element */
 /* Disable previous pseudo-element approach */
 body::before { content: none !important; }

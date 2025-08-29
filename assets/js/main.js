@@ -46,8 +46,10 @@
       if (!section) return
       if (position >= section.offsetTop && position <= (section.offsetTop + section.offsetHeight)) {
         navbarlink.classList.add('active')
+        navbarlink.setAttribute('aria-current', 'page')
       } else {
         navbarlink.classList.remove('active')
+        navbarlink.removeAttribute('aria-current')
       }
     })
   }
@@ -109,9 +111,13 @@
    * Mobile nav toggle
    */
   on('click', '.mobile-nav-toggle', function(e) {
-    select('body').classList.toggle('mobile-nav-active')
-    this.classList.toggle('bi-list')
-    this.classList.toggle('bi-x')
+    const body = select('body')
+    body.classList.toggle('mobile-nav-active')
+    const icon = this.querySelector('i') || this
+    icon.classList.toggle('bi-list')
+    icon.classList.toggle('bi-x')
+    const expanded = this.getAttribute('aria-expanded') === 'true'
+    this.setAttribute('aria-expanded', String(!expanded))
   })
 
   /**
@@ -125,8 +131,12 @@
       if (body.classList.contains('mobile-nav-active')) {
         body.classList.remove('mobile-nav-active')
         let navbarToggle = select('.mobile-nav-toggle')
-        navbarToggle.classList.toggle('bi-list')
-        navbarToggle.classList.toggle('bi-x')
+        if (navbarToggle) {
+          const icon = navbarToggle.querySelector('i') || navbarToggle
+          icon.classList.add('bi-list')
+          icon.classList.remove('bi-x')
+          navbarToggle.setAttribute('aria-expanded', 'false')
+        }
       }
       if (this.dataset && this.dataset.slowScroll === 'true') {
         scrolltoSlow(this.hash, 900)
@@ -146,16 +156,22 @@
    * Hero type effect
    */
   const typed = select('.typed')
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (typed) {
     let typed_strings = typed.getAttribute('data-typed-items')
-    typed_strings = typed_strings.split(',')
-    new Typed('.typed', {
-      strings: typed_strings,
-      loop: true,
-      typeSpeed: 100,
-      backSpeed: 50,
-      backDelay: 2000
-    });
+    typed_strings = typed_strings.split(',').map(s => s.trim())
+    if (!reduceMotion) {
+      new Typed('.typed', {
+        strings: typed_strings,
+        loop: true,
+        typeSpeed: 100,
+        backSpeed: 50,
+        backDelay: 2000
+      });
+    } else {
+      // Static fallback for reduced motion
+      typed.textContent = typed_strings[0] || ''
+    }
   }
 
   /**
@@ -222,10 +238,7 @@
     new Swiper('.portfolio-details-slider', {
       speed: 400,
       loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false
-      },
+      autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false },
       pagination: {
         el: '.swiper-pagination',
         type: 'bullets',
@@ -241,10 +254,7 @@
     new Swiper('.testimonials-slider', {
       speed: 600,
       loop: true,
-      autoplay: {
-        delay: 5000,
-        disableOnInteraction: false
-      },
+      autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false },
       slidesPerView: 'auto',
       pagination: {
         el: '.swiper-pagination',
