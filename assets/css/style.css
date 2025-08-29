@@ -109,6 +109,8 @@ body::before { content: none !important; }
 
 @media (prefers-reduced-motion: reduce) {
   body { animation: none; }
+  #hero h1 .accent::after,
+  .btn-hero-primary { animation: none !important; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -194,39 +196,34 @@ h6 {
   display: inline-block;
   margin: 15px auto;
   border-radius: 50%;
+  overflow: hidden; /* clip scaled image to ring */
 }
 
 #header .profile picture::before {
   content: "";
   position: absolute;
-  inset: -4px; /* extend a bit outside the image */
+  inset: 0;
   border-radius: inherit;
-  /* Multi-tint gold with subtle purple shimmers (mirrored) */
+  /* Match hero underline colors: alternating purple ↔ gold */
   background: conic-gradient(from var(--ring-angle),
-    /* warm gold family */
-    #fff4cc 0deg,
-    #ffeaa6 30deg,
-    var(--brand-yellow) 70deg,
-    /* mirror-side soft purples */
-    #e9d6ff 85deg,
-    #d8b4ff 105deg,
-    /* back to golds */
-    var(--brand-yellow) 130deg,
-    #ffd97a 150deg,
-    #fff1bf 190deg,
-    #ffe8a6 230deg,
-    /* original-side soft purples */
-    #e9d6ff 260deg,
-    #d8b4ff 285deg,
-    /* return to golds */
-    var(--brand-yellow) 310deg,
-    #fff4cc 360deg
+    var(--brand-purple) 0turn,
+    var(--brand-yellow) 0.25turn,
+    var(--brand-purple) 0.5turn,
+    var(--brand-yellow) 0.75turn,
+    var(--brand-purple) 1turn
   );
+  padding: 4px; /* thin ring */
+  /* Show only the ring, above the image */
+  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
   animation: spin-angle 16s linear infinite;
-  -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0);
-          mask: radial-gradient(farthest-side, transparent calc(100% - 6px), #000 0);
-  z-index: 0;
+  pointer-events: none;
+  z-index: 3;
 }
+
+#header .profile img { transform: scale(1.008); }
 
 #header .profile img {
   position: relative;
@@ -442,9 +439,10 @@ body.mobile-nav-active #main { margin-left: 300px; }
   bottom: -10px;
   height: 4px;
   border-radius: 999px;
-  background: linear-gradient(90deg, #bfa0ff, #ffe59a, #bfa0ff);
+  /* Broadly compatible shifting gradient */
+  background: linear-gradient(90deg, var(--brand-purple), var(--brand-yellow), var(--brand-purple));
   background-size: 200% 100%;
-  animation: hero-accent 6s ease-in-out infinite;
+  animation: hero-accent 1.6s linear infinite;
   width: var(--accent-width, 100%);
   margin: 0 auto;
 }
@@ -528,8 +526,23 @@ body.mobile-nav-active #main { margin-left: 300px; }
 
 .btn-hero-primary {
   color: #1a0b2e;
-  background: linear-gradient(135deg, #ffe59a, #d8b4ff);
+  /* Smooth shifting gradient sweep */
+  background: linear-gradient(135deg,
+    var(--brand-yellow) 0%,
+    #fff4cc 20%,
+    var(--brand-purple) 50%,
+    #fff4cc 80%,
+    var(--brand-yellow) 100%
+  );
+  background-size: 220% 220%;
+  animation: gradient-pan 5s ease-in-out infinite alternate;
   box-shadow: 0 8px 24px rgba(216, 180, 255, 0.25);
+}
+
+@keyframes gradient-pan {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
 }
 
 .btn-hero-primary:hover {
@@ -566,31 +579,21 @@ body.mobile-nav-active #main { margin-left: 300px; }
   display: block;
   border-radius: 16px;
   box-shadow: 0 10px 28px rgba(20, 157, 221, 0.18);
+  overflow: hidden; /* clip scaled image to ring */
 }
 
 .about .col-lg-4 picture::before {
   content: "";
   position: absolute;
-  inset: -5px; /* expand slightly for a prominent frame */
+  inset: 0;
   border-radius: inherit;
-  /* Multi-tint gold with subtle purple shimmers (mirrored) */
+  /* Match hero underline colors: alternating purple ↔ gold */
   background: conic-gradient(from var(--ring-angle),
-    #fff4cc 0deg,
-    #ffeaa6 30deg,
-    var(--brand-yellow) 70deg,
-    /* mirror-side soft purples */
-    #e9d6ff 85deg,
-    #d8b4ff 105deg,
-    /* back to golds */
-    var(--brand-yellow) 130deg,
-    #ffd97a 150deg,
-    #fff1bf 190deg,
-    #ffe8a6 230deg,
-    /* original-side soft purples */
-    #e9d6ff 260deg,
-    #d8b4ff 285deg,
-    var(--brand-yellow) 310deg,
-    #fff4cc 360deg
+    var(--brand-purple) 0turn,
+    var(--brand-yellow) 0.25turn,
+    var(--brand-purple) 0.5turn,
+    var(--brand-yellow) 0.75turn,
+    var(--brand-purple) 1turn
   );
   animation: spin-angle 18s linear infinite;
   /* cut out the center to create a border ring */
@@ -598,9 +601,12 @@ body.mobile-nav-active #main { margin-left: 300px; }
           mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
   -webkit-mask-composite: xor;
           mask-composite: exclude;
-  padding: 6px; /* ring thickness */
-  z-index: 0;
+  padding: 4px; /* thinner ring */
+  pointer-events: none;
+  z-index: 3;
 }
+
+.about .col-lg-4 picture img { transform: scale(1.006); }
 
 .about .col-lg-4 picture img {
   position: relative;
