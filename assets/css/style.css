@@ -60,7 +60,11 @@ body {
 
 /* Avoid jank on mobile: don't fix background on small screens */
 @media (max-width: 991px) {
-  body { background-attachment: scroll; }
+  body {
+    background-attachment: scroll;
+    /* Slow and smooth on mobile to avoid glitchiness */
+    animation: bg-float 16s ease-in-out infinite alternate;
+  }
 }
 
 /* Skip link: visually hidden until focused */
