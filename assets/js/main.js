@@ -153,24 +153,41 @@
   // Intentionally disabled smooth-scroll on first load to prevent unwanted jumps
 
   /**
-   * Hero type effect
+   * Hero type effect (lazy init when visible)
    */
-  const typed = select('.typed')
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  const onVisible = (elOrSelector, cb, options = { rootMargin: '200px 0px', threshold: 0.1 }) => {
+    const el = typeof elOrSelector === 'string' ? select(elOrSelector) : elOrSelector
+    if (!el) return
+    if (!('IntersectionObserver' in window)) { cb(); return }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          cb()
+          io.disconnect()
+        }
+      })
+    }, options)
+    io.observe(el)
+  }
+
+  const typed = select('.typed')
   if (typed) {
     let typed_strings = typed.getAttribute('data-typed-items')
-    typed_strings = typed_strings.split(',').map(s => s.trim())
-    if (!reduceMotion) {
-      new Typed('.typed', {
-        strings: typed_strings,
-        loop: true,
-        typeSpeed: 100,
-        backSpeed: 50,
-        backDelay: 2000
-      });
-    } else {
-      // Static fallback for reduced motion
+      .split(',').map(s => s.trim())
+    if (reduceMotion) {
       typed.textContent = typed_strings[0] || ''
+    } else {
+      onVisible('#hero', () => {
+        if (typeof Typed === 'undefined') return
+        new Typed('.typed', {
+          strings: typed_strings,
+          loop: true,
+          typeSpeed: 100,
+          backSpeed: 50,
+          backDelay: 2000
+        })
+      })
     }
   }
 
@@ -179,15 +196,23 @@
    */
   let skilsContent = select('.skills-content');
   if (skilsContent) {
-    new Waypoint({
-      element: skilsContent,
-      offset: '80%',
-      handler: function(direction) {
-        let progress = select('.progress .progress-bar', true);
-        progress.forEach((el) => {
-          el.style.width = el.getAttribute('aria-valuenow') + '%'
-        });
+    onVisible('.skills-content', () => {
+      if (typeof Waypoint === 'undefined') {
+        // Fallback: fill bars when visible
+        let progress = select('.progress .progress-bar', true)
+        progress.forEach((el) => { el.style.width = el.getAttribute('aria-valuenow') + '%' })
+        return
       }
+      new Waypoint({
+        element: skilsContent,
+        offset: '80%',
+        handler: function(direction) {
+          let progress = select('.progress .progress-bar', true);
+          progress.forEach((el) => {
+            el.style.width = el.getAttribute('aria-valuenow') + '%'
+          });
+        }
+      })
     })
   }
 
@@ -251,28 +276,30 @@
    * Testimonials slider
    */
   if (select('.testimonials-slider')) {
-    new Swiper('.testimonials-slider', {
-      speed: 600,
-      loop: true,
-      autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false },
-      slidesPerView: 'auto',
-      pagination: {
-        el: '.swiper-pagination',
-        type: 'bullets',
-        clickable: true
-      },
-      breakpoints: {
-        320: {
-          slidesPerView: 1,
-          spaceBetween: 20
+    onVisible('#testimonials', () => {
+      if (typeof Swiper === 'undefined') return
+      new Swiper('.testimonials-slider', {
+        speed: 600,
+        loop: true,
+        autoplay: reduceMotion ? false : { delay: 5000, disableOnInteraction: false },
+        slidesPerView: 'auto',
+        pagination: {
+          el: '.swiper-pagination',
+          type: 'bullets',
+          clickable: true
         },
-
-        1200: {
-          slidesPerView: 3,
-          spaceBetween: 20
+        breakpoints: {
+          320: {
+            slidesPerView: 1,
+            spaceBetween: 20
+          },
+          1200: {
+            slidesPerView: 3,
+            spaceBetween: 20
+          }
         }
-      }
-    });
+      })
+    })
   }
 
   /**
@@ -290,7 +317,7 @@
   /**
    * Initiate Pure Counter 
    */
-  new PureCounter();
+  onVisible('#facts', () => { if (typeof PureCounter !== 'undefined') new PureCounter() })
 
 let readMoreTextElements = document.querySelectorAll('.resume-item > span');
 
