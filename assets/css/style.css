@@ -1111,6 +1111,14 @@ section {
   line-height: 0;
 }
 
+/* Ensure inline SVG icons render like font icons */
+.services .icon svg {
+  width: 24px;
+  height: 24px;
+  display: block;
+  color: #fff;
+}
+
 .services .icon-box:hover .icon {
   background: #fff;
 }
