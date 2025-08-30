@@ -534,22 +534,29 @@ readMoreTextElements.forEach(element => {
         img.onload = () => img.classList.add('is-loaded');
       });
     };
-    const facts = document.getElementById('facts');
-    if (!facts) return;
+    const targets = [
+      document.getElementById('facts'),
+      document.querySelector('.brand-strip'),
+      document.getElementById('resume')
+    ].filter(Boolean);
+    if (!targets.length) return;
     if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-          if (entry.isIntersecting) {
-            loadAll();
-            io.disconnect();
-          }
-        });
-      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
-      io.observe(facts);
+        if (entries.some(e => e.isIntersecting)) {
+          loadAll();
+          io.disconnect();
+        }
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.05 });
+      targets.forEach(t => io.observe(t));
+      // Safety: if user jumps via anchor past #facts, still load when brand strip or resume shows
     } else {
       // Fallback: load on DOM ready if no IO support
       loadAll();
     }
+    // Additional safety: load after a brief delay if user is idle at top
+    setTimeout(() => {
+      if (images().length) loadAll();
+    }, 6000);
   })();
 
 })()
