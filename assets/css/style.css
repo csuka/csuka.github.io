@@ -98,6 +98,7 @@ body::before { content: none !important; }
 a {
   color: #149ddd;
   text-decoration: none;
+  cursor: pointer;
 }
 
 a:hover {
@@ -395,11 +396,20 @@ body.mobile-nav-active #main { margin-left: 0; }
 #hero h1 {
   font-size: 64px;
   font-weight: 700;
-  line-height: 56px;
+  line-height: 1.05;
+  letter-spacing: 0.2px;
   color: #fff;
   opacity: 0;
   transform: translateY(8px);
   animation: hero-appear 700ms ease-out 4s forwards;
+}
+
+.hero-sub {
+  color: #e8eef5;
+  margin-top: 10px;
+  margin-bottom: 0;
+  font-size: 20px;
+  max-width: 720px;
 }
 
 /* Gradient accent underline under the word 'Automation' */
@@ -695,7 +705,20 @@ section {
 }
 
 .about .content ul ul {
-  padding-left: 20px;
+  /* Tighter indent for nested list under Degrees */
+  padding-left: 10px;
+  margin-top: 6px;
+}
+.about .content ul ul li { margin-bottom: 4px; }
+.about .content ul li { flex-wrap: wrap; }
+.about .content ul li > ul { flex-basis: 100%; margin-left: 10px; }
+
+/* Keep degree items on one line on larger screens */
+@media (min-width: 992px) {
+  .about .content ul ul li {
+    white-space: nowrap;
+    word-break: keep-all;
+  }
 }
 
 .about .content ul li {
@@ -861,11 +884,94 @@ section {
 
 .resume .resume-item h5 {
   font-size: 16px;
-  background: #e4edf9;
-  padding: 5px 15px;
-  display: inline-block;
+  background: transparent;
+  padding: 0;
+  display: inline-flex;
+  align-items: center; /* center text and logo vertically */
   font-weight: 600;
   margin-bottom: 10px;
+}
+.resume .resume-item h5.no-banner {
+  background: transparent;
+  padding: 0;
+}
+
+/* Inline company logo next to dates in resume */
+.resume .resume-item h5 .logo-inline {
+  height: calc(1em + 20px);
+  width: auto;
+  margin-left: 12px; /* increased gap between text and logo */
+  vertical-align: -0.3em;
+}
+/* Fine-tune specific company logo sizes in resume dates */
+.resume .resume-item h5 .logo-inline.logo-rijksoverheid { height: calc(1em + 36px); }
+.resume .resume-item h5 .logo-inline.logo-ing { transform: scale(0.9); transform-origin: left center; }
+.resume .resume-item h5 .logo-inline.logo-uva { height: calc(1em + 28px); }
+.resume .resume-item h5 .logo-inline.logo-hva { height: calc(1em + 28px); }
+.resume .resume-item h5 .logo-inline.logo-true { transform: scale(0.8); transform-origin: left center; }
+
+/* Collapse groups */
+.resume .resume-extra { display: none; }
+.resume .resume-extra.show { display: block; }
+.resume .resume-show-more { margin: 0 0 16px 0; }
+.resume .resume-show-more .resume-more {
+  color: #149ddd;
+  text-decoration: underline;
+  cursor: pointer;
+}
+
+/* Visual gap indicator in the timeline with a diagonal striped segment */
+.resume .resume-show-more {
+  position: relative;
+  padding-left: 20px; /* align with resume item content */
+}
+
+/* Bubble with animated rays to indicate hidden timeline continuation */
+.resume .resume-show-more .timeline-gap {
+  position: absolute;
+  left: -9px; /* align with timeline bullets */
+  top: -2px;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
+.resume .resume-show-more .timeline-gap::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 14px;
+  height: 14px;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: #1f5297; /* timeline brand color */
+  box-shadow: 0 0 0 2px #fff; /* small ring to match timeline style */
+}
+.resume .resume-show-more .timeline-gap::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 36px;
+  height: 36px;
+  transform: translate(-50%, -50%);
+  background: repeating-conic-gradient(
+    #1f5297 0deg 6deg,
+    transparent 6deg 45deg
+  );
+  /* hollow center so rays start outside the bubble */
+  -webkit-mask: radial-gradient(circle, transparent 0 35%, #000 36% 100%);
+          mask: radial-gradient(circle, transparent 0 35%, #000 36% 100%);
+  opacity: .6;
+  animation: gap-rays 1.6s ease-out infinite;
+}
+
+/* When expanded, stop rays and leave a normal circle */
+.resume .resume-show-more.expanded .timeline-gap::after { display: none; }
+
+@keyframes gap-rays {
+  0% { transform: translate(-50%, -50%) scale(.6); opacity: .6; }
+  100% { transform: translate(-50%, -50%) scale(1.1); opacity: 0; }
 }
 
 .resume .resume-item ul {
@@ -902,6 +1008,12 @@ section {
 .resume span {
   color: #149ddd;
   cursor: pointer;
+}
+
+/* Make resume toggles clearly clickable */
+.resume .resume-item > span {
+  cursor: pointer !important;
+  text-decoration: underline;
 }
 
 .resume .read-more-text.show + span {
@@ -1117,6 +1229,15 @@ section {
   color: #fff;
 }
 
+/* Allow certificate badge images inside icon circle */
+.services .icon img.badge-img {
+  width: 42px;
+  height: 42px;
+  object-fit: contain;
+  display: block;
+  filter: none;
+}
+
 .services .icon-box:hover .icon {
   background: #fff;
 }
@@ -1134,17 +1255,37 @@ section {
 
 .services .title a {
   color: #343a40;
+  cursor: pointer;
 }
 
 .services .title a:hover {
   color: #149ddd;
 }
 
+.services .description a {
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+/* Make the whole certificate text lines show a pointer to hint clickability */
+.services .icon-box .title,
+.services .icon-box .description {
+  cursor: pointer;
+}
+
+/* Make whole certificate cards feel clickable */
+.services .icon-box { cursor: pointer; }
+
 .services .description {
   margin-left: 80px;
   line-height: 24px;
   font-size: 14px;
 }
+
+/* Tighten vertical spacing for Certificates section */
+.services { padding-bottom: 30px; }
+.services .icon-box { margin-bottom: 16px; }
+.services .icon-box:last-child { margin-bottom: 0; }
 
 /*--------------------------------------------------------------
 # Testimonials
@@ -1242,7 +1383,48 @@ section {
 # Contact
 --------------------------------------------------------------*/
 .contact {
+  padding-top: 32px;  /* reduce top gap from previous section */
   padding-bottom: 130px;
+}
+
+/*--------------------------------------------------------------
+# Brand Strip (companies banner)
+--------------------------------------------------------------*/
+.brand-strip { padding: 24px 0; }
+.brand-strip .brand-mask {
+  overflow: hidden;
+  position: relative;
+}
+.brand-strip .brand-track {
+  display: flex;
+  align-items: center;
+  gap: 48px;
+  animation: brand-scroll var(--brand-duration, 14s) linear infinite;
+  animation-play-state: paused; /* start paused to save CPU until visible */
+  will-change: transform;
+}
+.brand-strip.animate .brand-track { animation-play-state: running; }
+.brand-strip .brand-item img {
+  height: 58px;
+  width: auto;
+  display: block;
+  opacity: 0;
+  transition: opacity .3s ease, transform .2s ease;
+}
+.brand-strip .brand-item.brand-abn img { height: 46px; }
+.brand-strip .brand-item.brand-cloudnation img { height: 64px; }
+.brand-strip .brand-item.brand-hva img { height: 52px; }
+.brand-strip .brand-item.brand-true img { height: 27px; }
+.brand-strip .brand-item.brand-rijksoverheid img { height: 84px; }
+.brand-strip .brand-item.brand-uva img { height: 64px; }
+.brand-strip .brand-item.brand-ing img { height: 46px; }
+.brand-strip .brand-item.brand-bright img { height: 77px; }
+.brand-strip .brand-item img:hover { transform: translateY(-1px); }
+.brand-strip .brand-item img.is-loaded { opacity: 1; }
+
+@keyframes brand-scroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
 }
 
 .contact .info {
@@ -1379,6 +1561,37 @@ section {
 
 .contact .php-email-form .form-group {
   margin-bottom: 15px;
+}
+
+/* Subtle helper text above contact fields */
+.contact .php-email-form .field-hint {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: #6c757d;
+}
+
+/* Prominent, unified form hint spanning both columns */
+.contact .php-email-form .form-hint {
+  font-size: 22px; /* match Contact info headings */
+  font-weight: 600;
+  color: #050d18;
+  text-align: center;
+  margin: 0 0 12px 0;
+}
+
+.contact .php-email-form .form-hint .emoji {
+  display: inline-block;
+  font-size: 1.8em;
+  line-height: 1;
+  vertical-align: -10%;
+}
+
+/* Enlarge emoji in section titles slightly */
+.section-title .emoji {
+  display: inline-block;
+  font-size: 1.4em;
+  line-height: 1;
+  vertical-align: -5%;
 }
 
 .contact .php-email-form label {

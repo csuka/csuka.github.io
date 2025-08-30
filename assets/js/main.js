@@ -381,4 +381,155 @@ readMoreTextElements.forEach(element => {
     logos.forEach(logo => logo.style.setProperty('--logo-spin-duration', '9s'));
   })();
 
+  /**
+   * Make certificate cards fully clickable
+   */
+  (function makeCertificatesClickable() {
+    const cards = document.querySelectorAll('#certificates .icon-box');
+    if (!cards.length) return;
+    cards.forEach(card => {
+      const link = card.querySelector('.title a') || card.querySelector('.description a');
+      if (!link) return;
+      card.setAttribute('role', 'link');
+      card.setAttribute('tabindex', '0');
+      const go = () => window.open(link.href, link.target || '_self');
+      card.addEventListener('click', (e) => {
+        // Avoid double navigation if clicking the anchor directly
+        if (e.target.closest('a')) return;
+        go();
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          go();
+        }
+      });
+    });
+  })();
+
+  /**
+   * Resume: show limited items with expandable groups
+   */
+  (function initResumeGroups() {
+    const toggles = document.querySelectorAll('.resume-more');
+    if (!toggles.length) return;
+    toggles.forEach(t => {
+      const showMore = t.closest('.resume-show-more');
+      const targetSel = t.getAttribute('data-target');
+      const target = document.querySelector(targetSel);
+      if (!target) return;
+
+      // Set dynamic count in label if applicable
+      const count = target.querySelectorAll('.resume-item').length;
+      if (count && !target.classList.contains('show')) {
+        if (target.id === 'education-extra') {
+          t.textContent = `There are ${count} more! Click here to view…`;
+        } else if (target.id === 'experience-extra') {
+          t.textContent = `There are ${count} more! Click here to view…`;
+        }
+      }
+
+      const expand = (e) => {
+        if (e) e.preventDefault();
+        if (target.classList.contains('show')) return; // already expanded
+        target.classList.add('show');
+        // Remove the gap marker row entirely so the timeline connects seamlessly
+        if (showMore) {
+          showMore.remove();
+        }
+      };
+
+      // Click on text link expands once
+      t.addEventListener('click', expand);
+
+      // Click on the bulb also expands once
+      if (showMore) {
+        const bulb = showMore.querySelector('.timeline-gap');
+        if (bulb) bulb.addEventListener('click', expand);
+      }
+    });
+  })();
+
+  /**
+   * Brand strip: duplicate track for seamless loop and start animation only when visible
+   */
+  (function initBrandStrips() {
+    const strips = document.querySelectorAll('.brand-strip');
+    if (!strips.length) return;
+    const allowMotion = window.matchMedia('(prefers-reduced-motion: no-preference)').matches;
+    strips.forEach(strip => {
+      const track = strip.querySelector('.brand-track');
+      if (!track) return;
+
+      // Prepare images for lazy loading: move src to data-src and set tiny placeholder
+      const placeholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
+      track.querySelectorAll('img').forEach(img => {
+        if (!img.dataset.src && img.src && !img.src.startsWith('data:')) {
+          img.dataset.src = img.src;
+          img.src = placeholder;
+        }
+      });
+
+      // Duplicate full sequence once to ensure seamless looping
+      if (!track.dataset.cloned) {
+        track.innerHTML = track.innerHTML + track.innerHTML;
+        track.dataset.cloned = 'true';
+      }
+
+      // Disable CSS animation; use JS for perfect seamless marquee
+      track.style.animation = 'none';
+
+      let running = false;
+      let offset = 0;
+      let lastTs;
+      const speed = 80; // px per second
+
+      const halfWidth = () => track.scrollWidth / 2;
+
+      const step = (ts) => {
+        if (!allowMotion) return; // honor reduced motion
+        if (lastTs == null) lastTs = ts;
+        const dt = (ts - lastTs) / 1000;
+        lastTs = ts;
+        if (running) {
+          offset -= speed * dt;
+          const w = halfWidth();
+          if (offset <= -w) offset += w; // wrap seamlessly at exact boundary
+          track.style.transform = `translateX(${offset}px)`;
+        }
+        requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+
+      // Lazy-load images and start scrolling only when visible
+      if ('IntersectionObserver' in window) {
+        const imgObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => {
+            if (entry.isIntersecting) {
+              const el = entry.target;
+              if (el.dataset && el.dataset.src) {
+                el.src = el.dataset.src;
+                el.onload = () => el.classList.add('is-loaded');
+                el.removeAttribute('data-src');
+              }
+              imgObserver.unobserve(el);
+            }
+          });
+        }, { rootMargin: '200px 0px', threshold: 0.01 });
+        track.querySelectorAll('img').forEach(img => imgObserver.observe(img));
+
+        const stripObserver = new IntersectionObserver((entries) => {
+          entries.forEach(entry => { running = entry.isIntersecting; });
+        }, { rootMargin: '0px 0px -5% 0px', threshold: 0.01 });
+        stripObserver.observe(strip);
+      } else {
+        // No IO, load images immediately and run
+        track.querySelectorAll('img').forEach(img => {
+          if (img.dataset && img.dataset.src) { img.src = img.dataset.src; img.classList.add('is-loaded'); }
+        });
+        running = true;
+      }
+    });
+  })();
+
 })()
