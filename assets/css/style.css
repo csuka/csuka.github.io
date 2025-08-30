@@ -211,7 +211,7 @@ h6 {
   font-weight: 600;
   -moz-text-align-last: center;
   text-align-last: center;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
 #header .profile h1 a,
@@ -354,6 +354,25 @@ body.mobile-nav-active #main { margin-left: 300px; }
   position: relative;
 }
 
+/* Serve a smaller hero image on mobile to reduce bytes */
+@media (max-width: 768px) {
+  #hero {
+    /* Fallback for browsers without image-set */
+    background-image: url("../img/hero-bg.jpg");
+    /* Prefer smaller WebP on mobile with JPEG fallback */
+    background-image: -webkit-image-set(
+      url("../img/hero-bg-mobile.webp") type("image/webp") 1x,
+      url("../img/hero-bg.jpg") type("image/jpeg") 1x
+    );
+    background-image: image-set(
+      url("../img/hero-bg-mobile.webp") type("image/webp") 1x,
+      url("../img/hero-bg.jpg") type("image/jpeg") 1x
+    );
+    background-position: center;
+    background-size: cover;
+  }
+}
+
 @media screen and (min-width: 1199px) {
   body.mobile-nav-active #hero {
     width: calc(100% - 300px);
@@ -427,7 +446,7 @@ body.mobile-nav-active #main { margin-left: 300px; }
   margin-top: 6px;
   margin-bottom: 50px;
   font-size: 26px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Open Sans", sans-serif;
 }
 
 /* Layout: headline + buttons above, typed line at bottom */
@@ -486,7 +505,7 @@ body.mobile-nav-active #main { margin-left: 300px; }
   padding: 10px 18px;
   border-radius: 10px;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif;
   transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.3s ease, color 0.3s ease;
   text-decoration: none;
 }
@@ -731,6 +750,17 @@ section {
   line-height: 0;
 }
 
+/* Inline SVG Tux (bi-tux) sizing and position */
+.facts .count-box svg.bi-tux {
+  display: block;
+  width: 44px;
+  height: 44px;
+  color: #149ddd;
+  float: left;
+  transform: translateY(-20px) scale(0.9);
+  transform-origin: center;
+}
+
 /* Fine-tune the Tux icon only: slightly smaller and nudged upward */
 .facts .count-box i.bi-tux {
   transform: translateY(-20px) scale(0.9);
@@ -760,7 +790,7 @@ section {
   margin-top: 20px;
   color: #122f57;
   font-size: 15px;
-  font-family: "Poppins", sans-serif;
+  font-family: "Open Sans", sans-serif;
   transition: ease-in-out 0.3s;
 }
 
@@ -784,7 +814,7 @@ section {
   text-transform: uppercase;
   display: block;
   font-weight: 600;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif;
   color: #050d18;
 }
 
@@ -837,7 +867,7 @@ section {
   font-size: 18px;
   font-weight: 600;
   text-transform: uppercase;
-  font-family: "Poppins", sans-serif;
+  font-family: "Raleway", sans-serif;
   color: #050d18;
   margin-bottom: 10px;
 }
