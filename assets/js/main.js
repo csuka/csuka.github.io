@@ -114,8 +114,8 @@
     const body = select('body')
     body.classList.toggle('mobile-nav-active')
     const icon = this.querySelector('i') || this
-    icon.classList.toggle('bi-list')
-    icon.classList.toggle('bi-x')
+    icon.classList.toggle('bx-menu')
+    icon.classList.toggle('bx-x')
     const expanded = this.getAttribute('aria-expanded') === 'true'
     this.setAttribute('aria-expanded', String(!expanded))
   })
@@ -133,8 +133,8 @@
         let navbarToggle = select('.mobile-nav-toggle')
         if (navbarToggle) {
           const icon = navbarToggle.querySelector('i') || navbarToggle
-          icon.classList.add('bi-list')
-          icon.classList.remove('bi-x')
+          icon.classList.add('bx-menu')
+          icon.classList.remove('bx-x')
           navbarToggle.setAttribute('aria-expanded', 'false')
         }
       }
@@ -359,8 +359,12 @@ readMoreTextElements.forEach(element => {
         if (body.classList.contains('mobile-nav-active')) {
           body.classList.remove('mobile-nav-active')
           const navbarToggle = select('.mobile-nav-toggle')
-          navbarToggle.classList.toggle('bi-list')
-          navbarToggle.classList.toggle('bi-x')
+          if (navbarToggle) {
+            const icon = navbarToggle.querySelector('i') || navbarToggle
+            icon.classList.add('bx-menu')
+            icon.classList.remove('bx-x')
+            navbarToggle.setAttribute('aria-expanded', 'false')
+          }
         }
         scrollto(target.hash);
       }

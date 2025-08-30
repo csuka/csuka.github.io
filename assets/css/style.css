@@ -37,7 +37,10 @@ body {
 
 html, body { min-height: 100%; }
 
-body { background: transparent; }
+body {
+  background: transparent;
+  overflow-x: hidden; /* prevent horizontal gap on menu slide */
+}
 
 /* Avoid jank on mobile: don't fix background on small screens */
 /* No background animation on mobile or desktop (static for performance) */
@@ -155,6 +158,9 @@ h6 {
   overflow-y: auto;
 }
 
+/* Center the avatar and title within the sidebar profile */
+#header .profile { text-align: center; }
+
 #header .profile img {
   margin: 15px auto;
   display: block;
@@ -168,34 +174,16 @@ h6 {
   display: inline-block;
   margin: 15px auto;
   border-radius: 50%;
-  overflow: hidden; /* clip scaled image to ring */
+  overflow: visible; /* no clipping needed without ring */
+  padding: 0 !important;            /* remove any frame spacing */
+  background: none !important;       /* remove gradient/background */
+  box-shadow: none !important;       /* remove shadow glow */
 }
 
-#header .profile picture::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  border-radius: inherit;
-  /* Match hero underline colors: alternating purple ↔ gold */
-  background: conic-gradient(from var(--ring-angle),
-    var(--brand-purple) 0turn,
-    var(--brand-yellow) 0.25turn,
-    var(--brand-purple) 0.5turn,
-    var(--brand-yellow) 0.75turn,
-    var(--brand-purple) 1turn
-  );
-  padding: 4px; /* thin ring */
-  /* Show only the ring, above the image */
-  -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-          mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-  -webkit-mask-composite: xor;
-          mask-composite: exclude;
-  animation: spin-angle 16s linear infinite;
-  pointer-events: none;
-  z-index: 3;
-}
+/* Remove colorful ring around sidebar avatar */
+#header .profile picture::before { content: none !important; animation: none !important; background: none !important; }
 
-#header .profile img { transform: scale(1.008); }
+#header .profile img { transform: none; border: 0 !important; background: transparent !important; }
 
 #header .profile img {
   position: relative;
@@ -257,8 +245,9 @@ h6 {
 
 /* When menu is open, shift layout */
 body.mobile-nav-active #header { left: 0; }
+/* Overlay menu: keep content fixed to avoid gaps */
 body.mobile-nav-active #hero,
-body.mobile-nav-active #main { margin-left: 300px; }
+body.mobile-nav-active #main { margin-left: 0; }
 
 
 .nav-menu {
@@ -331,7 +320,7 @@ body.mobile-nav-active #main { margin-left: 300px; }
 }
 
 .mobile-nav-active {
-  overflow: auto; /* allow page scroll when menu is open */
+  overflow: auto; /* allow page scroll while menu is open */
 }
 
 /* moved above with other layout rules */
@@ -375,7 +364,7 @@ body.mobile-nav-active #main { margin-left: 300px; }
 
 @media screen and (min-width: 1199px) {
   body.mobile-nav-active #hero {
-    width: calc(100% - 300px);
+    width: 100%; /* keep full width when menu overlays */
   }
 }
 
