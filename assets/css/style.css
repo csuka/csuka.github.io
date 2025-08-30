@@ -788,40 +788,38 @@ section {
 }
 
 /*--------------------------------------------------------------
-# Akills
+# Skills
 --------------------------------------------------------------*/
-.skills .progress {
-  height: 60px;
-  display: block;
-  background: none;
-  border-radius: 0;
-}
-
-.skills .progress .skill {
-  padding: 0;
-  margin: 0 0 6px 0;
-  text-transform: uppercase;
-  display: block;
-  font-weight: 600;
-  font-family: "Raleway", sans-serif;
+.skills .skills-category {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 16px 0 8px;
   color: #050d18;
 }
 
-.skills .progress .skill .val {
-  float: right;
-  font-style: normal;
+.skills .chip-group {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 16px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
 }
 
-.skills .progress-bar-wrap {
-  background: #dce8f8;
-  height: 10px;
+.skills .chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 10px;
+  border-radius: 9999px;
+  background: rgba(20, 157, 221, 0.12);
+  border: 1px solid #dce8f8;
+  font-weight: 600;
+  font-size: 13px;
+  color: #050d18;
 }
 
-.skills .progress-bar {
-  width: 1px;
-  height: 10px;
-  transition: 0.9s;
-  background-color: #149ddd;
+.skills .chip:hover {
+  background: rgba(20, 157, 221, 0.18);
 }
 
 /*--------------------------------------------------------------
