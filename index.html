@@ -42,6 +42,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
 
+  <!-- Preload hero image for mobile with high priority -->
+  <link rel="preload" as="image" href="assets/img/hero-bg-mobile.webp" fetchpriority="high" type="image/webp" imagesizes="100vw">
+
   <link rel="preload" href="assets/vendor/aos/aos.css" as="style" onload="this.rel='stylesheet'">
   <noscript><link href="assets/vendor/aos/aos.css" rel="stylesheet"></noscript>
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
@@ -94,6 +97,16 @@
   </header>
 
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+    <!-- Inline hero media for faster LCP on mobile/desktop -->
+    <picture class="hero-media" aria-hidden="true">
+      <!-- Mobile first -->
+      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-mobile.webp" type="image/webp">
+      <source media="(max-width: 768px)" srcset="assets/img/hero-bg.jpg" type="image/jpeg">
+      <!-- Desktop/WebP -->
+      <source srcset="assets/img/hero-bg.webp" type="image/webp">
+      <!-- Fallback JPEG -->
+      <img src="assets/img/hero-bg.jpg" alt="" loading="eager" decoding="async" fetchpriority="high">
+    </picture>
     <div class="hero-container" data-aos="fade-in">
       <h1>IXTION - Revolutionize IT <span class="accent">Automation</span></h1>
       <div class="hero-ctas" role="group" aria-label="Primary actions">
