@@ -464,6 +464,8 @@ readMoreTextElements.forEach(element => {
       // Prepare images for lazy loading: move src to data-src and set tiny placeholder
       const placeholder = 'data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==';
       track.querySelectorAll('img').forEach(img => {
+        // If HTML already marked as deferred (data-defer-src), leave it; we'll load it when #facts shows
+        if (img.dataset.deferSrc) return;
         if (!img.dataset.src && img.src && !img.src.startsWith('data:')) {
           img.dataset.src = img.src;
           img.src = placeholder;
@@ -501,23 +503,8 @@ readMoreTextElements.forEach(element => {
       };
       requestAnimationFrame(step);
 
-      // Lazy-load images and start scrolling only when visible
+      // Start marquee only when strip becomes visible; image loading may be triggered earlier by #facts
       if ('IntersectionObserver' in window) {
-        const imgObserver = new IntersectionObserver((entries) => {
-          entries.forEach(entry => {
-            if (entry.isIntersecting) {
-              const el = entry.target;
-              if (el.dataset && el.dataset.src) {
-                el.src = el.dataset.src;
-                el.onload = () => el.classList.add('is-loaded');
-                el.removeAttribute('data-src');
-              }
-              imgObserver.unobserve(el);
-            }
-          });
-        }, { rootMargin: '200px 0px', threshold: 0.01 });
-        track.querySelectorAll('img').forEach(img => imgObserver.observe(img));
-
         const stripObserver = new IntersectionObserver((entries) => {
           entries.forEach(entry => { running = entry.isIntersecting; });
         }, { rootMargin: '0px 0px -5% 0px', threshold: 0.01 });
@@ -525,11 +512,44 @@ readMoreTextElements.forEach(element => {
       } else {
         // No IO, load images immediately and run
         track.querySelectorAll('img').forEach(img => {
-          if (img.dataset && img.dataset.src) { img.src = img.dataset.src; img.classList.add('is-loaded'); }
+          const src = img.dataset.deferSrc || img.dataset.src;
+          if (src) { img.src = src; img.classList.add('is-loaded'); img.removeAttribute('data-defer-src'); img.removeAttribute('data-src'); }
         });
         running = true;
       }
     });
+  })();
+
+  /**
+   * Defer company logos (brand strip + resume inline) until #facts is visible
+   */
+  (function deferLogosAfterFacts() {
+    const images = () => document.querySelectorAll('img[data-defer-src]');
+    const loadAll = () => {
+      images().forEach(img => {
+        const src = img.dataset.deferSrc;
+        if (!src) return;
+        img.src = src;
+        img.removeAttribute('data-defer-src');
+        img.onload = () => img.classList.add('is-loaded');
+      });
+    };
+    const facts = document.getElementById('facts');
+    if (!facts) return;
+    if ('IntersectionObserver' in window) {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            loadAll();
+            io.disconnect();
+          }
+        });
+      }, { rootMargin: '0px 0px -10% 0px', threshold: 0.1 });
+      io.observe(facts);
+    } else {
+      // Fallback: load on DOM ready if no IO support
+      loadAll();
+    }
   })();
 
 })()
