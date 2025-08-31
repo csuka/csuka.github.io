@@ -120,6 +120,22 @@
     this.setAttribute('aria-expanded', String(!expanded))
   })
 
+  // Close button inside the menu panel
+  on('click', '.menu-close', function(e) {
+    e.preventDefault()
+    const body = select('body')
+    if (body.classList.contains('mobile-nav-active')) {
+      body.classList.remove('mobile-nav-active')
+      let navbarToggle = select('.mobile-nav-toggle')
+      if (navbarToggle) {
+        const icon = navbarToggle.querySelector('i') || navbarToggle
+        icon.classList.add('bx-menu')
+        icon.classList.remove('bx-x')
+        navbarToggle.setAttribute('aria-expanded', 'false')
+      }
+    }
+  })
+
   /**
    * Scrool with ofset on links with a class name .scrollto
    */
