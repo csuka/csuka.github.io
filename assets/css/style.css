@@ -554,6 +554,12 @@ body.mobile-nav-active #main { margin-left: 0; }
   background: rgba(255, 255, 255, 0.25);
 }
 
+/* Override generic anchor hover color for hero CTAs */
+.btn-hero-primary:hover,
+.btn-hero-primary:focus-visible { color: #ffffff; }
+.btn-hero-secondary:hover,
+.btn-hero-secondary:focus-visible { color: #000000; }
+
 #hero p span {
   color: #fff;
   /* padding-right: 100px; */
