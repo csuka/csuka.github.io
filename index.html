@@ -53,10 +53,11 @@
   <noscript><link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"></noscript>
 
   <link href="assets/css/style.css" rel="stylesheet">
+  <link href="one.css" rel="stylesheet">
 
 </head>
 
-<body>
+<body class="site-loading">
 
   <a href="#main" class="skip-link visually-hidden">Skip to content</a>
   <button class="mobile-nav-toggle" aria-label="Open menu" aria-controls="navbar" aria-expanded="false">
@@ -117,9 +118,24 @@
     <div class="hero-container" data-aos="fade-in">
       <h1>IXTION - Revolutionize IT <span class="accent">Automation</span></h1>
       <div class="hero-ctas" role="group" aria-label="Primary actions">
-        <a href="#about" class="btn-hero btn-hero-primary scrollto">Discover</a>
+        <a href="#about" class="btn btn-hero scrollto" aria-label="Discover more about IXTION">
+          <span class="btn-label">Discover</span>
+          <div class="container-stars"><div class="stars"></div></div>
+          <div class="glow"><div class="circle"></div><div class="circle"></div></div>
+        </a>
         <a href="#skills" class="btn-hero btn-hero-secondary scrollto">Explore skills</a>
         <a href="#contact" class="btn-hero btn-hero-secondary scrollto">Get in touch</a>
+      </div>
+      <!-- Intro loader shown on initial load, above typed line -->
+      <div class="intro-loader" role="status" aria-live="polite" aria-label="Loading">
+        <div class="loader">
+          <div class="loader-slice"></div>
+          <div class="loader-slice"></div>
+          <div class="loader-slice"></div>
+          <div class="loader-slice"></div>
+          <div class="loader-slice"></div>
+          <div class="loader-slice"></div>
+        </div>
       </div>
       <p>I'm 
         <span class="typed" aria-hidden="true" data-typed-items="an Automation expert, a Technical Leader, an IT professional, a DevOps Engineer, a Master of Science, a Site Reliability Engineer, a Linux Engineer, an Ansible specialist, a nerd, a Cloud Engineer"></span>
@@ -846,7 +862,13 @@
                 <div class="error-message"></div>
                 <div class="sent-message">Your message has been sent. Thank you!</div>
               </div>
-              <div class="text-center"><button type="submit" class="btn-hero btn-hero-primary"><i class="bx bxl-telegram" aria-hidden="true"></i> Send message</button></div>
+              <div class="text-center">
+                <button type="submit" class="btn" aria-label="Send message">
+                  <span class="btn-label"><i class="bx bxl-telegram" aria-hidden="true"></i> Send message</span>
+                  <div class="container-stars"><div class="stars"></div></div>
+                  <div class="glow"><div class="circle"></div><div class="circle"></div></div>
+                </button>
+              </div>
             </form>
           </div>
 
@@ -878,6 +900,16 @@
   <script src="assets/vendor/mail/validate.js" defer></script>
 
   <script src="assets/js/main.js" defer></script>
+
+  <script>
+    // Fade out the intro loader after ~5 seconds from window load
+    window.addEventListener('load', function () {
+      setTimeout(function () {
+        document.body.classList.remove('site-loading');
+        document.body.classList.add('hero-reveal');
+      }, 5600);
+    });
+  </script>
 
 </body>
 
