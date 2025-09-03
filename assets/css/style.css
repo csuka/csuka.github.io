@@ -530,8 +530,8 @@ body.site-loading #hero .hero-container p { opacity: 1; transform: none; }
 /* Loader placement above typed line */
 .intro-loader {
   position: absolute;
-  top: 160px;
-  left: 280px;
+  top: 190px;
+  left: 200px;
   z-index: 1; /* beneath the h1 */
   display: flex;
   justify-content: center;
