@@ -42,8 +42,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Preload trimmed mobile hero (300x500) with high priority -->
-  <link rel="preload" as="image" href="assets/img/hero-bg-300x500.webp" fetchpriority="high" type="image/webp" imagesizes="100vw">
+  <!-- Preload mobile hero variant with high priority -->
+  <link rel="preload" as="image" href="assets/img/hero-bg-mobile.webp" fetchpriority="high" type="image/webp" imagesizes="100vw">
 
   <link rel="preload" href="assets/vendor/aos/aos.css" as="style" onload="this.rel='stylesheet'">
   <noscript><link href="assets/vendor/aos/aos.css" rel="stylesheet"></noscript>
@@ -53,7 +53,7 @@
   <noscript><link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"></noscript>
 
   <link href="assets/css/style.css" rel="stylesheet">
-  <link href="one.css" rel="stylesheet">
+  <link href="assets/css/components.css" rel="stylesheet">
 
 </head>
 
@@ -107,9 +107,9 @@
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
     <!-- Inline hero media for faster LCP on mobile/desktop -->
     <picture class="hero-media" aria-hidden="true">
-      <!-- Mobile first (trimmed 300x500) -->
-      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-300x500.webp" type="image/webp">
-      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-300x500.jpg" type="image/jpeg">
+      <!-- Mobile first (high-res portrait) -->
+      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-mobile.webp" type="image/webp">
+      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-mobile.jpg" type="image/jpeg">
       <!-- Desktop/WebP -->
       <source srcset="assets/img/hero-bg.webp" type="image/webp">
       <!-- Fallback JPEG -->
@@ -156,20 +156,16 @@
               <img src="assets/img/logo-160-transparent.png" srcset="assets/img/logo-160-transparent.png 1x, assets/img/logo-320-transparent.png 2x" width="160" height="160" alt="IXTION logo" loading="lazy">
             </picture>
           </h2>
-          <p>
-            Revolutionize your IT automation with our innovative solutions designed to simplify complex tasks and enhance efficiency.<br>
-            I use best practices to automate a range of IT functions, from managing infrastructure and deploying applications<br>
-            to automating workflows.
+          <p class="about-tagline">
+            <span class="tag-chip"><span class="tag-emoji" aria-hidden="true">⚙️</span>Automate everything</span>
+            <span class="tag-chip"><span class="tag-emoji" aria-hidden="true">🧩</span>Simplify complexity</span>
+            <span class="tag-chip"><span class="tag-emoji" aria-hidden="true">🚀</span>Deliver faster</span>
+            <span class="tagline-sub">Precision-built automation that elevates reliability and delivers at scale.</span>
           </p>
 
           <br><br>
-          <h2>About me</h2>
-          <p>I’m Kevin — a platform and automation engineer who goes above and beyond to deliver results.</p>
-          <ul>
-            <li>Ship faster: CI/CD and Infrastructure as Code at scale</li>
-            <li>Stay reliable: observability, alerting, and SRE practices</li>
-            <li>Stay secure: identity, hardened baselines, and smart networking</li>
-          </ul>
+          <h2>Above and beyond</h2>
+          <p>I’m Kevin, a platform and automation Engineer who deliver results.</p>
 
         </div>
 
@@ -556,7 +552,7 @@
           <div class="resume-item">
             <h4>Automation Engineer</h4>
             <h5>2024 - present <a href="https://www.rijksoverheid.nl" target="_blank" rel="noopener noreferrer"><img class="logo-inline logo-rijksoverheid" data-defer-src="assets/img/company/rijksoverheid.png" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Rijksoverheid" loading="lazy"></a></h5>
-            <p><em>Rijksoverheid, The Hauge</em></p>
+            <p><em>Rijksoverheid, The Hague</em></p>
             <p class="read-more-text">
             Ansible all the way
           </p>
@@ -902,12 +898,12 @@
   <script src="assets/js/main.js" defer></script>
 
   <script>
-    // Fade out the intro loader after ~5 seconds from window load
+    // Fade out the intro loader after ~4 seconds from window load
     window.addEventListener('load', function () {
       setTimeout(function () {
         document.body.classList.remove('site-loading');
         document.body.classList.add('hero-reveal');
-      }, 5600);
+      }, 4100);
     });
   </script>
 
