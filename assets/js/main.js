@@ -191,6 +191,11 @@
   if (typed) {
     let typed_strings = typed.getAttribute('data-typed-items')
       .split(',').map(s => s.trim())
+    // Shuffle for a different order on each load.
+    typed_strings = typed_strings
+      .map(value => ({ value, sort: Math.random() }))
+      .sort((a, b) => a.sort - b.sort)
+      .map(({ value }) => value)
     if (reduceMotion) {
       typed.textContent = typed_strings[0] || ''
     } else {
