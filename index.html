@@ -42,22 +42,177 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Raleway:wght@400;600;700&display=swap" rel="stylesheet">
 
-  <!-- Preload trimmed mobile hero (300x500) with high priority -->
-  <link rel="preload" as="image" href="assets/img/hero-bg-300x500.webp" fetchpriority="high" type="image/webp" imagesizes="100vw">
+  <!-- Preload intro animation assets first -->
+  <link rel="preload" as="image" href="assets/img/logo-160-transparent.png" fetchpriority="high">
+  <link rel="modulepreload" href="assets/js/anime.esm.min.js">
 
-  <link rel="preload" href="assets/vendor/aos/aos.css" as="style" onload="this.rel='stylesheet'">
-  <noscript><link href="assets/vendor/aos/aos.css" rel="stylesheet"></noscript>
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link rel="preload" href="assets/vendor/swiper/swiper-bundle.min.css" as="style" onload="this.rel='stylesheet'">
-  <noscript><link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet"></noscript>
+  <!-- Preload mobile hero variant with low priority -->
+  <link rel="preload" as="image" href="assets/img/hero-bg-mobile.webp" fetchpriority="low" type="image/webp" imagesizes="100vw">
 
-  <link href="assets/css/style.css" rel="stylesheet">
-  <link href="one.css" rel="stylesheet">
+  <!-- Main CSS is loaded after the intro animation assets are ready -->
+  <noscript>
+    <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+    <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
+    <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+    <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/css/components.css" rel="stylesheet">
+  </noscript>
+
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+    }
+    body.no-intro {
+      background: transparent;
+    }
+    body.site-loading #header,
+    body.site-loading #main,
+    body.site-loading #footer,
+    body.site-loading .back-to-top {
+      visibility: hidden;
+    }
+    /* Intro Animation Overlay */
+    .intro-animation-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: #000;
+      z-index: 99999;
+      display: grid;
+      place-items: center;
+      transition: opacity 1s ease-out;
+    }
+    .intro-animation-overlay.fade-out {
+      opacity: 0;
+      pointer-events: none;
+    }
+    .intro-animation-overlay .wrapper {
+      position: relative;
+      width: 600px;
+      height: 600px;
+    }
+    .intro-animation-overlay .hud {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 600px;
+      height: 600px;
+      overflow: visible;
+      transform-origin: 300px 314px;
+    }
+    .intro-animation-overlay .tick {
+      position: absolute;
+      width: 2px;
+      height: 14px;
+      background: #722F37;
+      top: 50%;
+      left: 50%;
+      transform-origin: center bottom;
+      opacity: 0;
+    }
+    .intro-animation-overlay .arcs {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: visible;
+    }
+    .intro-animation-overlay .arc {
+      fill: none;
+      stroke-width: 4;
+      stroke-linecap: butt;
+    }
+    .intro-animation-overlay .arc-gray {
+      stroke: #3a3a45;
+      stroke-width: 12;
+      stroke-linecap: round;
+      transform-origin: 300px 314px;
+      filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.6));
+    }
+    .intro-animation-overlay .arc-red { stroke: #FF4D4D; }
+    .intro-animation-overlay .arc-orange { stroke: #FF9F1C; }
+    .intro-animation-overlay .arc-yellow { stroke: #BF00FF; }
+    .intro-animation-overlay .arc-lime { stroke: #A6FF4D; }
+    .intro-animation-overlay .arc-green { stroke: #3DFF9F; }
+    .intro-animation-overlay .arc-cyan { stroke: #2EE6D6; }
+    .intro-animation-overlay .arc-blue { stroke: #3DA5FF; }
+    .intro-animation-overlay .arc-aqua { stroke: #2ED6A1; }
+    .intro-animation-overlay .circle-purple {
+      fill: none;
+      stroke: #6B5B7A;
+      stroke-width: 1;
+      opacity: 0;
+    }
+    .intro-animation-overlay .center-logo {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 160px;
+      height: 160px;
+      opacity: 0;
+      animation: intro-logo-spin 9s linear infinite;
+      z-index: 10;
+    }
+    @keyframes intro-logo-spin {
+      from { transform: translate(-50%, -50%) rotate(0deg); }
+      to { transform: translate(-50%, -50%) rotate(360deg); }
+    }
+    .intro-animation-overlay .logo-text {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(calc(-50% + 7px), 90px);
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-size: 24px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      opacity: 0;
+      z-index: 10;
+    }
+    .intro-animation-overlay .tagline {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(calc(-50% + 13px), 130px);
+      color: #fff;
+      font-family: 'Arial', sans-serif;
+      font-size: 14px;
+      font-weight: bold;
+      letter-spacing: 4px;
+      opacity: 0;
+      z-index: 10;
+    }
+    @media (max-width: 650px) {
+      .intro-animation-overlay .wrapper {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%) scale(0.48);
+        transform-origin: center center;
+      }
+    }
+  </style>
 
 </head>
 
 <body class="site-loading">
+
+  <!-- Intro Animation Overlay -->
+  <div class="intro-animation-overlay" id="introAnimation">
+    <div class="wrapper">
+      <div class="hud" id="introHud"></div>
+      <img src="assets/img/logo-160-transparent.png" class="center-logo" id="introCenterLogo" alt="">
+      <div class="logo-text" id="introLogoText">IXTION</div>
+      <div class="tagline" id="introTagline">Revolutionize IT Automation</div>
+    </div>
+  </div>
 
   <a href="#main" class="skip-link visually-hidden">Skip to content</a>
   <button class="mobile-nav-toggle" aria-label="Open menu" aria-controls="navbar" aria-expanded="false">
@@ -107,9 +262,9 @@
   <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
     <!-- Inline hero media for faster LCP on mobile/desktop -->
     <picture class="hero-media" aria-hidden="true">
-      <!-- Mobile first (trimmed 300x500) -->
-      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-300x500.webp" type="image/webp">
-      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-300x500.jpg" type="image/jpeg">
+      <!-- Mobile first (high-res portrait) -->
+      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-mobile.webp" type="image/webp">
+      <source media="(max-width: 768px)" srcset="assets/img/hero-bg-mobile.jpg" type="image/jpeg">
       <!-- Desktop/WebP -->
       <source srcset="assets/img/hero-bg.webp" type="image/webp">
       <!-- Fallback JPEG -->
@@ -138,7 +293,7 @@
         </div>
       </div>
       <p>I'm 
-        <span class="typed" aria-hidden="true" data-typed-items="an Automation expert, a Technical Leader, an IT professional, a DevOps Engineer, a Master of Science, a Site Reliability Engineer, a Linux Engineer, an Ansible specialist, a nerd, a Cloud Engineer"></span>
+        <span class="typed" aria-hidden="true" data-typed-items="an Automation expert, a Technical Leader, an IT professional, a DevOps Engineer, a Master of Science, a Site Reliability Engineer, a Linux Engineer, an Ansible specialist, a Platform Engineer"></span>
         <span class="visually-hidden">an Automation expert and Technical Leader</span>
       </p>
     </div>
@@ -156,20 +311,16 @@
               <img src="assets/img/logo-160-transparent.png" srcset="assets/img/logo-160-transparent.png 1x, assets/img/logo-320-transparent.png 2x" width="160" height="160" alt="IXTION logo" loading="lazy">
             </picture>
           </h2>
-          <p>
-            Revolutionize your IT automation with our innovative solutions designed to simplify complex tasks and enhance efficiency.<br>
-            I use best practices to automate a range of IT functions, from managing infrastructure and deploying applications<br>
-            to automating workflows.
+          <p class="about-tagline">
+            <span class="tag-chip"><span class="tag-emoji" aria-hidden="true">⚙️</span>Automate everything</span>
+            <span class="tag-chip"><span class="tag-emoji" aria-hidden="true">🧩</span>Simplify complexity</span>
+            <span class="tag-chip"><span class="tag-emoji" aria-hidden="true">🚀</span>Deliver faster</span>
+            <span class="tagline-sub">Precision-built automation that elevates reliability and delivers at scale.</span>
           </p>
 
           <br><br>
-          <h2>About me</h2>
-          <p>I’m Kevin — a platform and automation engineer who goes above and beyond to deliver results.</p>
-          <ul>
-            <li>Ship faster: CI/CD and Infrastructure as Code at scale</li>
-            <li>Stay reliable: observability, alerting, and SRE practices</li>
-            <li>Stay secure: identity, hardened baselines, and smart networking</li>
-          </ul>
+          <h2>Above and beyond</h2>
+          <p>I’m Kevin, a platform and automation Engineer who deliver results.</p>
 
         </div>
 
@@ -556,7 +707,7 @@
           <div class="resume-item">
             <h4>Automation Engineer</h4>
             <h5>2024 - present <a href="https://www.rijksoverheid.nl" target="_blank" rel="noopener noreferrer"><img class="logo-inline logo-rijksoverheid" data-defer-src="assets/img/company/rijksoverheid.png" src="data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==" alt="Rijksoverheid" loading="lazy"></a></h5>
-            <p><em>Rijksoverheid, The Hauge</em></p>
+            <p><em>Rijksoverheid, The Hague</em></p>
             <p class="read-more-text">
             Ansible all the way
           </p>
@@ -891,24 +1042,476 @@
 
   <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bx bx-up-arrow-alt" aria-hidden="true"></i></a>
 
-  <script src="assets/vendor/purecounter/purecounter_vanilla.js" defer></script>
-  <script src="assets/vendor/aos/aos.js" defer></script>
-  <!-- Removed GLightbox and Isotope as no portfolio is present -->
-  <script src="assets/vendor/swiper/swiper-bundle.min.js" defer></script>
-  <script src="assets/vendor/typed.js/typed.min.js" defer></script>
-  <script src="assets/vendor/waypoints/noframework.waypoints.js" defer></script>
-  <script src="assets/vendor/mail/validate.js" defer></script>
+  <script>
+    (function() {
+      const cssAssets = [
+        'assets/vendor/aos/aos.css',
+        'assets/vendor/bootstrap/css/bootstrap.min.css',
+        'assets/vendor/boxicons/css/boxicons.min.css',
+        'assets/vendor/swiper/swiper-bundle.min.css',
+        'assets/css/style.css',
+        'assets/css/components.css'
+      ];
 
-  <script src="assets/js/main.js" defer></script>
+      const scriptAssets = [
+        'assets/vendor/purecounter/purecounter_vanilla.js',
+        'assets/vendor/aos/aos.js',
+        'assets/vendor/swiper/swiper-bundle.min.js',
+        'assets/vendor/typed.js/typed.min.js',
+        'assets/vendor/waypoints/noframework.waypoints.js',
+        'assets/vendor/mail/validate.js',
+        'assets/js/main.js'
+      ];
+
+      const loadStyles = (urls) => {
+        urls.forEach((href) => {
+          const link = document.createElement('link');
+          link.rel = 'stylesheet';
+          link.href = href;
+          document.head.appendChild(link);
+        });
+      };
+
+      const loadScripts = (urls) => {
+        urls.forEach((src) => {
+          const script = document.createElement('script');
+          script.src = src;
+          script.defer = true;
+          document.body.appendChild(script);
+        });
+      };
+
+      window.__loadSiteAssets = () => {
+        if (window.__siteAssetsLoaded) return;
+        window.__siteAssetsLoaded = true;
+        loadStyles(cssAssets);
+        loadScripts(scriptAssets);
+      };
+
+      const logo = new Image();
+      logo.onload = window.__loadSiteAssets;
+      logo.onerror = window.__loadSiteAssets;
+      logo.src = 'assets/img/logo-160-transparent.png';
+      setTimeout(window.__loadSiteAssets, 6000);
+    })();
+  </script>
 
   <script>
-    // Fade out the intro loader after ~5 seconds from window load
-    window.addEventListener('load', function () {
-      setTimeout(function () {
-        document.body.classList.remove('site-loading');
-        document.body.classList.add('hero-reveal');
-      }, 5600);
+    (function() {
+      const search = window.location.search || '';
+      const params = new URLSearchParams(search);
+      const shouldSkipIntro = search.includes('noanim=1') ||
+        params.get('noanim') === '1' ||
+        params.get('noanim') === 'true' ||
+        params.has('noanim');
+
+      if (!shouldSkipIntro) return;
+
+      window.__skipIntroAnimation = true;
+      document.body.classList.remove('site-loading');
+      document.body.classList.add('hero-reveal', 'no-intro');
+
+      const overlay = document.getElementById('introAnimation');
+      if (overlay) {
+        overlay.remove();
+      }
+
+      if (typeof window.__loadSiteAssets === 'function') {
+        window.__loadSiteAssets();
+      }
+    })();
+  </script>
+
+  <script type="module">
+    import { animate, stagger } from './assets/js/anime.esm.min.js';
+
+    const shouldSkipIntro = window.__skipIntroAnimation === true;
+    const overlay = document.getElementById('introAnimation');
+    if (shouldSkipIntro) {
+      if (overlay) {
+        overlay.remove();
+      }
+      document.body.classList.remove('site-loading');
+      document.body.classList.add('hero-reveal', 'no-intro');
+      if (typeof window.__loadSiteAssets === 'function') {
+        window.__loadSiteAssets();
+      }
+    } else {
+    const hud = document.getElementById('introHud');
+    const COUNT = 160;
+    const RADIUS = 275;
+    const OUTER_RADIUS = 310;
+    const CENTER_X = 300;
+    const CENTER_Y = 314;
+
+    const ticks = [];
+
+    // Create all ticks positioned in a circle
+    for (let i = 0; i < COUNT; i++) {
+      const angle = (i / COUNT) * 360;
+      const tick = document.createElement('div');
+      tick.className = 'tick';
+      tick.style.transform = `rotate(${angle}deg) translateY(-${RADIUS}px)`;
+      hud.appendChild(tick);
+      ticks.push(tick);
+    }
+
+    // Create SVG for arcs
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'arcs');
+    svg.setAttribute('viewBox', '0 0 600 600');
+    svg.style.overflow = 'visible';
+    hud.appendChild(svg);
+
+    // Helper to create arc path
+    function createArc(startAngle, endAngle, radius) {
+      const startRad = (startAngle - 90) * Math.PI / 180;
+      const endRad = (endAngle - 90) * Math.PI / 180;
+      const x1 = CENTER_X + radius * Math.cos(startRad);
+      const y1 = CENTER_Y + radius * Math.sin(startRad);
+      const x2 = CENTER_X + radius * Math.cos(endRad);
+      const y2 = CENTER_Y + radius * Math.sin(endRad);
+      const largeArc = endAngle - startAngle > 180 ? 1 : 0;
+      return `M ${x1} ${y1} A ${radius} ${radius} 0 ${largeArc} 1 ${x2} ${y2}`;
+    }
+
+    // 8 arcs, clockwise from top
+    const arcColors = ['red', 'orange', 'yellow', 'lime', 'green', 'cyan', 'blue', 'aqua'];
+    const arcSpan = 40;
+    const arcGap = 5;
+    const startOffset = 2;
+    const allArcs = [];
+
+    arcColors.forEach((color, i) => {
+      const startAngle = startOffset + i * (arcSpan + arcGap);
+      const endAngle = startAngle + arcSpan;
+      const arc = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+      arc.setAttribute('class', `arc arc-${color}`);
+      arc.setAttribute('d', createArc(startAngle, endAngle, OUTER_RADIUS));
+      arc.setAttribute('filter', 'url(#introArcGlow)');
+      arc.style.opacity = 0;
+      svg.appendChild(arc);
+      allArcs.push(arc);
     });
+
+    // Purple circles
+    const MIDDLE_RADIUS = 252;
+    const purpleCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    purpleCircle.setAttribute('class', 'circle-purple');
+    purpleCircle.setAttribute('cx', CENTER_X);
+    purpleCircle.setAttribute('cy', CENTER_Y);
+    purpleCircle.setAttribute('r', MIDDLE_RADIUS);
+    svg.appendChild(purpleCircle);
+
+    const purpleCircle2 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    purpleCircle2.setAttribute('class', 'circle-purple');
+    purpleCircle2.setAttribute('cx', CENTER_X);
+    purpleCircle2.setAttribute('cy', CENTER_Y);
+    purpleCircle2.setAttribute('r', MIDDLE_RADIUS + 3);
+    svg.appendChild(purpleCircle2);
+
+    const purpleCircle3 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    purpleCircle3.setAttribute('class', 'circle-purple');
+    purpleCircle3.setAttribute('cx', CENTER_X);
+    purpleCircle3.setAttribute('cy', CENTER_Y);
+    purpleCircle3.setAttribute('r', MIDDLE_RADIUS + 13);
+    svg.appendChild(purpleCircle3);
+
+    const purpleCircle4 = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    purpleCircle4.setAttribute('class', 'circle-purple');
+    purpleCircle4.setAttribute('cx', CENTER_X);
+    purpleCircle4.setAttribute('cy', CENTER_Y);
+    purpleCircle4.setAttribute('r', MIDDLE_RADIUS + 16);
+    svg.appendChild(purpleCircle4);
+
+    // Gray inner arc
+    const INNER_RADIUS = 230;
+    const grayArcSpan = 360 / 7;
+
+    // Create gradients + glow filter
+    const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+    const glowFilter = document.createElementNS('http://www.w3.org/2000/svg', 'filter');
+    glowFilter.setAttribute('id', 'introArcGlow');
+    glowFilter.setAttribute('x', '-50%');
+    glowFilter.setAttribute('y', '-50%');
+    glowFilter.setAttribute('width', '200%');
+    glowFilter.setAttribute('height', '200%');
+    const glowBlur = document.createElementNS('http://www.w3.org/2000/svg', 'feGaussianBlur');
+    glowBlur.setAttribute('in', 'SourceGraphic');
+    const isMobileGlow = window.matchMedia('(max-width: 650px)').matches;
+    glowBlur.setAttribute('stdDeviation', isMobileGlow ? '6.5' : '5');
+    glowBlur.setAttribute('result', 'blur');
+    const glowStrength = document.createElementNS('http://www.w3.org/2000/svg', 'feColorMatrix');
+    glowStrength.setAttribute('type', 'matrix');
+    glowStrength.setAttribute(
+      'values',
+      '1 0 0 0 0 ' +
+      '0 1 0 0 0 ' +
+      '0 0 1 0 0 ' +
+      `0 0 0 ${isMobileGlow ? '2.4' : '2.0'} 0`
+    );
+    glowStrength.setAttribute('in', 'blur');
+    glowStrength.setAttribute('result', 'glow');
+    const glowMerge = document.createElementNS('http://www.w3.org/2000/svg', 'feMerge');
+    const glowMergeNode1 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+    glowMergeNode1.setAttribute('in', 'glow');
+    const glowMergeNode2 = document.createElementNS('http://www.w3.org/2000/svg', 'feMergeNode');
+    glowMergeNode2.setAttribute('in', 'SourceGraphic');
+    glowMerge.appendChild(glowMergeNode1);
+    glowMerge.appendChild(glowMergeNode2);
+    glowFilter.appendChild(glowBlur);
+    glowFilter.appendChild(glowStrength);
+    glowFilter.appendChild(glowMerge);
+    defs.appendChild(glowFilter);
+    const gradient = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient.setAttribute('id', 'introGrayArcGradient');
+    gradient.setAttribute('x1', '0%');
+    gradient.setAttribute('y1', '0%');
+    gradient.setAttribute('x2', '100%');
+    gradient.setAttribute('y2', '100%');
+    const stop1 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop1.setAttribute('offset', '0%');
+    stop1.setAttribute('stop-color', '#5a5a65');
+    const stop2 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop2.setAttribute('offset', '100%');
+    stop2.setAttribute('stop-color', '#1a1a20');
+    gradient.appendChild(stop1);
+    gradient.appendChild(stop2);
+    defs.appendChild(gradient);
+
+    const gradient2 = document.createElementNS('http://www.w3.org/2000/svg', 'linearGradient');
+    gradient2.setAttribute('id', 'introGrayArcGradient2');
+    gradient2.setAttribute('x1', '100%');
+    gradient2.setAttribute('y1', '100%');
+    gradient2.setAttribute('x2', '0%');
+    gradient2.setAttribute('y2', '0%');
+    const stop3 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop3.setAttribute('offset', '0%');
+    stop3.setAttribute('stop-color', '#5a5a65');
+    const stop4 = document.createElementNS('http://www.w3.org/2000/svg', 'stop');
+    stop4.setAttribute('offset', '100%');
+    stop4.setAttribute('stop-color', '#1a1a20');
+    gradient2.appendChild(stop3);
+    gradient2.appendChild(stop4);
+    defs.appendChild(gradient2);
+    svg.appendChild(defs);
+
+    const grayArc = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    grayArc.setAttribute('class', 'arc arc-gray');
+    grayArc.setAttribute('d', createArc(0, grayArcSpan, INNER_RADIUS));
+    grayArc.style.stroke = 'url(#introGrayArcGradient)';
+    grayArc.style.opacity = 0;
+    svg.appendChild(grayArc);
+
+    const grayArc2 = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    grayArc2.setAttribute('class', 'arc arc-gray');
+    grayArc2.setAttribute('d', createArc(160, 160 + grayArcSpan, INNER_RADIUS));
+    grayArc2.style.stroke = 'url(#introGrayArcGradient2)';
+    grayArc2.style.opacity = 0;
+    svg.appendChild(grayArc2);
+
+    const introStartTime = Date.now();
+    const INTRO_MIN_DURATION_MS = 11500;
+    const INTRO_REVEAL_DELAY_MS = 2000;
+
+    // Function to fade out overlay and reveal main site
+    function finishAnimation() {
+      const elapsed = Date.now() - introStartTime;
+      const remaining = Math.max(0, INTRO_MIN_DURATION_MS - elapsed);
+      setTimeout(() => {
+        overlay.classList.add('fade-out');
+        setTimeout(() => {
+          overlay.remove();
+          setTimeout(() => {
+            document.body.classList.remove('site-loading');
+            document.body.classList.add('hero-reveal');
+          }, INTRO_REVEAL_DELAY_MS);
+        }, 1000);
+      }, remaining);
+    }
+
+    function startAnimation() {
+      ticks[0].style.opacity = 1;
+
+      const firstTick = animate(ticks[0], {
+        opacity: [1, 0, 1, 0, 1],
+        duration: 400,
+        ease: 'linear'
+      });
+
+      firstTick.then(() => {
+        return animate(ticks[1], {
+          opacity: [1, 0, 1, 0, 1],
+          duration: 400,
+          ease: 'linear'
+        });
+      }).then(() => {
+        return animate(ticks[2], {
+          opacity: [1, 0, 1, 0, 1],
+          duration: 400,
+          ease: 'linear'
+        });
+      }).then(() => {
+        const tickAnim = animate(ticks, {
+          opacity: [0, 1],
+          scaleY: [0, 1],
+          duration: 400,
+          delay: stagger(5, { from: 0 }),
+          ease: 'out(3)'
+        });
+
+        setTimeout(() => {
+          const randomIndex1 = Math.floor(Math.random() * 4);
+          const oppositeIndex1 = randomIndex1 + 4;
+          const firstArcs = [allArcs[randomIndex1], allArcs[oppositeIndex1]];
+
+          const availableIndices = [0,1,2,3].filter(i => i !== randomIndex1);
+          const randomIndex2 = availableIndices[Math.floor(Math.random() * availableIndices.length)];
+          const oppositeIndex2 = randomIndex2 + 4;
+          const secondArcs = [allArcs[randomIndex2], allArcs[oppositeIndex2]];
+
+          const usedIndices = [randomIndex1, oppositeIndex1, randomIndex2, oppositeIndex2];
+          const finalArcs = allArcs.filter((_, i) => !usedIndices.includes(i));
+
+          setTimeout(() => {
+            animate(firstArcs, {
+              opacity: [0, 1],
+              duration: 200,
+              ease: 'out(2)'
+            }).then(() => {
+              animate(firstArcs, {
+                opacity: [1, 0, 1],
+                duration: 200,
+                ease: 'linear'
+              }).then(() => {
+                animate(secondArcs, {
+                  opacity: [0, 1],
+                  duration: 200,
+                  ease: 'out(2)'
+                }).then(() => {
+                  animate(secondArcs, {
+                    opacity: [1, 0, 1, 0, 1],
+                    duration: 400,
+                    ease: 'linear'
+                  });
+                  animate(finalArcs, {
+                    opacity: [0, 1],
+                    duration: 200,
+                    ease: 'out(2)'
+                  }).then(() => {
+                    animate(finalArcs, {
+                      opacity: [1, 0, 1, 0, 1],
+                      duration: 400,
+                      ease: 'linear'
+                    });
+                  });
+                });
+
+                animate([grayArc, grayArc2], {
+                  opacity: [0, 1],
+                  rotate: [0, 280],
+                  duration: 2000,
+                  ease: 'out(3)'
+                });
+
+                setTimeout(() => {
+                  animate([purpleCircle, purpleCircle2, purpleCircle3, purpleCircle4], {
+                    opacity: [0, 1],
+                    duration: 1500,
+                    ease: 'out(2)'
+                  });
+                }, 300);
+
+                animate(firstArcs, {
+                  opacity: [1, 0, 1],
+                  duration: 200,
+                  ease: 'linear'
+                }).then(() => {
+                  animate(hud, {
+                    scale: [1, 1.22],
+                    duration: 3500,
+                    ease: 'out(3)'
+                  });
+                  const centerLogo = document.getElementById('introCenterLogo');
+                  animate(centerLogo, {
+                    opacity: [0, 1],
+                    duration: 2000,
+                    ease: 'out(2)'
+                  });
+                  const logoText = document.getElementById('introLogoText');
+                  setTimeout(() => {
+                    animate(logoText, {
+                      opacity: [0, 1],
+                      duration: 3000,
+                      ease: 'out(2)'
+                    });
+
+                    setTimeout(() => {
+                      animate(firstArcs, {
+                        opacity: [1, 0, 1],
+                        duration: 200,
+                        ease: 'linear'
+                      }).then(() => {
+                        return animate(secondArcs, {
+                          opacity: [1, 0, 1, 0, 1],
+                          duration: 400,
+                          ease: 'linear'
+                        });
+                      }).then(() => {
+                        return animate(finalArcs, {
+                          opacity: [1, 0, 1, 0, 1],
+                          duration: 400,
+                          ease: 'linear'
+                        });
+                      }).then(() => {
+                        animate(hud, {
+                          rotate: [0, 1080],
+                          duration: 2500,
+                          ease: 'in(2)'
+                        });
+                        animate([...allArcs, ...ticks, grayArc, grayArc2, purpleCircle, purpleCircle2, purpleCircle3, purpleCircle4], {
+                          opacity: [1, 0],
+                          duration: 2500,
+                          ease: 'in(2)'
+                        });
+                        const tagline = document.getElementById('introTagline');
+                        animate(tagline, {
+                          opacity: [0, 1],
+                          duration: 3000,
+                          ease: 'out(2)'
+                        }).then(() => {
+                          finishAnimation();
+                        });
+                      });
+                    }, 2000);
+                  }, 3000);
+                });
+              });
+            });
+          }, 200);
+        }, 480);
+
+        tickAnim.then(() => {
+          animate(ticks, {
+            scaleY: [1, 1.3],
+            scaleX: [1, 1.8],
+            duration: 400,
+            ease: 'out(2)'
+          });
+        });
+      });
+    }
+
+    function startSiteLoad() {
+      if (typeof window.__loadSiteAssets === 'function') {
+        window.__loadSiteAssets();
+      }
+    }
+
+    startAnimation();
+    startSiteLoad();
+    }
+
   </script>
 
 </body>
