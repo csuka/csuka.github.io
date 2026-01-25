@@ -33,6 +33,55 @@
     ]
   }
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Kevin Csuka",
+    "url": "https://ixtion.nl/",
+    "image": "https://ixtion.nl/assets/img/profile-img.webp",
+    "jobTitle": "Platform & Automation Engineer",
+    "worksFor": {
+      "@type": "Organization",
+      "name": "IXTION",
+      "url": "https://ixtion.nl/"
+    },
+    "alumniOf": [
+      {
+        "@type": "CollegeOrUniversity",
+        "name": "University of Amsterdam",
+        "sameAs": "https://www.uva.nl/"
+      }
+    ],
+    "hasCredential": [
+      {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "degree",
+        "name": "Master of Science - Security & Network Engineering"
+      },
+      {
+        "@type": "EducationalOccupationalCredential",
+        "credentialCategory": "degree",
+        "name": "Bachelor of Science - System & Network Engineering"
+      }
+    ],
+    "knowsAbout": [
+      "Ansible",
+      "Terraform",
+      "AWS",
+      "Azure",
+      "Kubernetes",
+      "Linux",
+      "DevOps",
+      "IT Automation",
+      "Site Reliability Engineering",
+      "Platform Engineering"
+    ],
+    "sameAs": [
+      "https://www.linkedin.com/in/kevin-csuka-0b128b10b/"
+    ]
+  }
+  </script>
 
   <link href="assets/img/favicon.png" rel="icon">
   <link href="assets/img/logo-320.png" rel="apple-touch-icon">
@@ -46,8 +95,8 @@
   <link rel="preload" as="image" href="assets/img/logo-160-transparent.png" fetchpriority="high">
   <link rel="modulepreload" href="assets/js/anime.esm.min.js">
 
-  <!-- Preload mobile hero variant with low priority -->
-  <link rel="preload" as="image" href="assets/img/hero-bg-mobile.webp" fetchpriority="low" type="image/webp" imagesizes="100vw">
+  <!-- Preload mobile hero variant with low priority (only on mobile viewports) -->
+  <link rel="preload" as="image" href="assets/img/hero-bg-mobile.webp" fetchpriority="low" type="image/webp" media="(max-width: 768px)">
 
   <!-- Main CSS is loaded after the intro animation assets are ready -->
   <noscript>
@@ -135,13 +184,13 @@
       filter: drop-shadow(3px 3px 2px rgba(0,0,0,0.6));
     }
     .intro-animation-overlay .arc-red { stroke: #FF4D4D; }
-    .intro-animation-overlay .arc-orange { stroke: #FF9F1C; }
-    .intro-animation-overlay .arc-yellow { stroke: #BF00FF; }
+    .intro-animation-overlay .arc-orange { stroke: #3DFF9F; } 
+    .intro-animation-overlay .arc-yellow { stroke: #3DA5FF; }
     .intro-animation-overlay .arc-lime { stroke: #A6FF4D; }
-    .intro-animation-overlay .arc-green { stroke: #3DFF9F; }
+    .intro-animation-overlay .arc-green { stroke: #FF9F1C; }
     .intro-animation-overlay .arc-cyan { stroke: #2EE6D6; }
-    .intro-animation-overlay .arc-blue { stroke: #3DA5FF; }
-    .intro-animation-overlay .arc-aqua { stroke: #2ED6A1; }
+    .intro-animation-overlay .arc-blue { stroke: #BF00FF; }
+    .intro-animation-overlay .arc-aqua { stroke: #2a09cc; }
     .intro-animation-overlay .circle-purple {
       fill: none;
       stroke: #6B5B7A;
@@ -292,8 +341,8 @@
           <div class="loader-slice"></div>
         </div>
       </div>
-      <p>I'm 
-        <span class="typed" aria-hidden="true" data-typed-items="an Automation expert, a Technical Leader, an IT professional, a DevOps Engineer, a Master of Science, a Site Reliability Engineer, a Linux Engineer, an Ansible specialist, a Platform Engineer"></span>
+      <p>I'm
+        <span class="typed" aria-hidden="true" data-typed-items="an Automation Expert, a Technical Leader, an IT professional, a DevOps Engineer, a Master of Science, a Linux Engineer, a Platform Engineer"></span>
         <span class="visually-hidden">an Automation expert and Technical Leader</span>
       </p>
     </div>
@@ -353,7 +402,7 @@
               <div class="col-lg-6">
                 <ul>
                   <li><i class="bx bx-envelope" aria-hidden="true"></i> <strong>Email</strong> <span>info@ixtion.nl</span></li>
-                  <li><i class="bx bx-time" aria-hidden="true"></i> <strong>Availability</strong> <span>--</span></li>
+                  <li><i class="bx bx-time" aria-hidden="true"></i> <strong>Availability</strong> <span>On request</span></li>
                 </ul>
               </div>
             </div>
@@ -440,6 +489,7 @@
             <ul class="chip-group" aria-label="Automation and DevOps skills (row 2)">
               <li class="chip">Vagrant</li>
               <li class="chip">Git</li>
+              <li class="chip">Ansible Automation Platform</li>
             </ul>
 
             <h3 class="skills-category">Programming &amp; Scripting</h3>
