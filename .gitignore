@@ -25,11 +25,14 @@ dist/
 build/
 .cache/
 
+# Ai
+.clau*
+.ope*
+.code*
+
 # Source maps (exclude from repo)
 *.map
 
 # Environment files
 .env
 .env.*
-
-test_*

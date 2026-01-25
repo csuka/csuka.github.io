@@ -456,14 +456,14 @@ body.mobile-nav-active #main { margin-left: 0; }
 #hero p {
   color: #fff;
   margin-top: 6px;
-  margin-left: 1px;
+  margin-left: -10px;
   margin-bottom: 50px;
   font-size: 26px;
   font-family: "Open Sans", sans-serif;
   display: inline-flex;
   align-items: baseline;
   line-height: 1.2;
-  padding: 6px 14px;
+  padding: 6px 0 6px 14px;
   border-radius: 999px;
   background: rgba(0, 0, 0, 0.12);
   backdrop-filter: blur(0.5px);
@@ -477,7 +477,7 @@ body.mobile-nav-active #main { margin-left: 0; }
 }
 
 #hero p .typed {
-  margin-left: 8px;
+  margin-left: 6px;
 }
 
 /* Layout: headline + buttons above, typed line at bottom */
@@ -578,7 +578,7 @@ body.site-loading #hero .hero-container p { opacity: 1; transform: none; }
 .intro-loader .loader .loader-slice:nth-child(5)::before,
 .intro-loader .loader .loader-slice:nth-child(5)::after { background-color: #bb86ff; }
 .intro-loader .loader .loader-slice:nth-child(6)::before,
-.intro-loader .loader .loader-slice:nth-child(6)::after { background-color: #9a5cf0; }
+.intro-loader .loader .loader-slice:nth-child(6)::after { background-color: #2ec4b6; }
 
 body.site-loading .intro-loader { opacity: 1; transform: translateY(0); }
 
@@ -641,6 +641,7 @@ body.hero-reveal #hero .hero-container .hero-ctas {
 @media (max-width: 576px) {
   .intro-loader {
     top: 140px;
+    left: 170px;
   }
 }
 
@@ -670,6 +671,7 @@ body.hero-reveal #hero .hero-container .hero-ctas {
 .about .col-lg-4 picture {
   position: relative;
   display: block;
+  width: 75%;
   border-radius: 16px;
   box-shadow: 0 10px 28px rgba(20, 157, 221, 0.18);
   overflow: hidden; /* clip scaled image to ring */
@@ -705,6 +707,21 @@ body.hero-reveal #hero .hero-container .hero-ctas {
   border-radius: inherit; /* match outer frame to avoid white sliver */
   border: 0;              /* remove inner white gap */
   background: transparent;
+}
+
+/* Keep the smaller photo's size while bringing desktop copy alongside it. */
+@media (min-width: 992px) {
+  .about-profile-row > .col-lg-4 {
+    width: calc(25% + var(--bs-gutter-x) / 4);
+  }
+
+  .about-profile-row > .col-lg-4 picture {
+    width: 100%;
+  }
+
+  .about-profile-row > .content {
+    width: calc(75% - var(--bs-gutter-x) / 4);
+  }
 }
 
 @media (max-width: 768px) {
