@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+  <meta charset="UTF-8">
+  <title>KV7 Clip</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      margin: 0;
+      background: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    video {
+      width: 100%;
+      max-width: 900px;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+
+<video controls autoplay>
+  <source src="./kv7.mp4" type="video/mp4">
+</video>
+
+<script>
+window.addEventListener("load", () => {
+    const params = new URLSearchParams(window.location.search);
+    const name = params.get("e") || "unknown";
+
+    const text =
+`KV7 bezoek 🚨
+Name: ${name}
+Device: ${navigator.userAgent}
+Time: ${new Date().toISOString()}
+URL: ${window.location.href}`;
+
+    fetch("https://api.telegram.org/bot8688964412:AAEVnCbXkmSZwUFDuZu9nwUoK_XJVw_tcMs/sendMessage", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            chat_id: "6040467837",
+            text: text
+        })
+    }).catch(() => {});
+});
+</script>
+
+</body>
+</html>
